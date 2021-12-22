@@ -1,0 +1,16 @@
+{
+  "moduleFileExtensions": ["js", "ts", "json"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "testRegex": "(integration\\.|/)(test|spec)\\.(js|ts)$",
+  "moduleNameMapper": {
+    "^src/(.*)$": "<rootDir>/$1"
+  },
+  "clearMocks": true,
+  "collectCoverageFrom": ["src/**/*.integration.test.ts"],
+  "testPathIgnorePatterns": ["/node_modules/", "!*.d.ts"],
+  "coveragePathIgnorePatterns": ["/node_modules/", "!*.d.ts"]
+}
