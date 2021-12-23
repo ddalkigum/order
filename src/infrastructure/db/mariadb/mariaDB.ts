@@ -10,9 +10,9 @@ export default class MariaDB implements IDatabase {
   @inject(TYPES.Logger) private logger: ILogger;
   private connection?: Connection;
 
-  public async init (): Promise<boolean> {
+  public async init (): Promise<void> {
     this.connection = await createConnection(devConnectionOption)
-    return this.connection.isConnected
+    this.logger.info(`Maria database connected: ${this.connection.isConnected}`);
   }
 
   public async executeSelectQuery <T extends IEntity>(query: string, params: any[]): Promise<T> {

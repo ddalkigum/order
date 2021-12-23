@@ -3,7 +3,7 @@ export interface IEntity {
 }
 
 export interface IDatabase {
-  init: () => Promise<boolean>;
+  init: () => Promise<void>;
   executeSelectQuery: (query: string, params: any[]) => Promise<T | T[]>;
   executeWriteQuery: (query: string, params: any[]) => Promise<T>;
 }

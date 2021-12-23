@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { IUserEntity } from './interface';
 
-@Entity()
+@Entity({ name: 'user' })
 export default class UserEntity implements IUserEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
