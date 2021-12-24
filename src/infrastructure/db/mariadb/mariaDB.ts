@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import { Connection, createConnection } from 'typeorm';
+import { Connection, createConnection, getConnection } from 'typeorm';
 import { TYPES } from '../../../types';
 import { ILogger } from '../../logger/interface';
 import { IDatabase, IEntity } from './interface';
@@ -15,11 +15,26 @@ export default class MariaDB implements IDatabase {
     this.logger.info(`Maria database connected: ${this.connection.isConnected}`);
   }
 
-  public async executeSelectQuery <T extends IEntity>(query: string, params: any[]): Promise<T> {
-    return 
+  public async executeSelectQuery <T extends IEntity>(query: string, params: any[]): Promise<T | []> {
+    try {
+      const result = await this.connection.query(query, params);
+      return result ? result : [];
+    } finally {
+      await this.connection.close();
+    }
   }
 
-  public async executeWriteQuery <T extends IEntity>(query: string, params: any[]): Promise<any> {
-    return 
+  public async executeWriteQuery (query: string, params: any[]): Promise<void> {
+    const masterQueryRunner = this.connection.createQueryRunner('master');
+    try {
+      this.logger.debug(`Write... params: ${params}\nquery: ${query}`)
+      await masterQueryRunner.startTransaction()
+      await this.connection.query(query, params);
+      await masterQueryRunner.commitTransaction();
+    } catch (error) {
+      await masterQueryRunner.rollbackTransaction();
+    } finally {
+      await masterQueryRunner.release();
+    } 
   }
 }
