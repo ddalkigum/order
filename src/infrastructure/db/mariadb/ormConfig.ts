@@ -7,7 +7,7 @@ export const devConnectionOption: ConnectionOptions = {
   ...dbConfig,
   type: MARIA_DB,
   synchronize: false,
-  logger: 'debug',
+  logging: process.env.NODE_ENV === 'local',
   entities: ['src/infrastructure/db/mariadb/entity/**.ts'],
   migrations: ['migration/*.{.ts,.js}'],
   cli: {

@@ -1,7 +1,7 @@
 import { Container } from 'inversify';
 import 'reflect-metadata';
-import { IApiResponse } from './common/api/interface';
-import ApiResponse from './common/api/response';
+import { ApiResponse, IApiResponse } from './common/api/response';
+import { IErrorGenerator, ErrorGenerator } from './common/error/errorGenerator';
 import { IHttpRouter } from './domain/router/interface';
 import UserRouter from './domain/router/user';
 import { IUserService, UserService } from './domain/service/user';
@@ -14,22 +14,17 @@ import WinstonLogger from './infrastructure/logger/winston';
 import { TYPES } from './types';
 
 const container = new Container();
-// logger container 
-container.bind<ILogger>(TYPES.Logger).to(WinstonLogger).inSingletonScope();
-
-// db container
-container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB).inSingletonScope();
-
-// router container 
-container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter).inSingletonScope();
-
-// server container
-container.bind<IServer>(TYPES.Server).to(ExpressServer).inSingletonScope();
-
 // common container 
-container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse).inSingletonScope();
+container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse)
+container.bind<IErrorGenerator>(TYPES.ErrorGenerator).to(ErrorGenerator).inSingletonScope();
 
-// service container 
+// domain container 
+container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter).inSingletonScope();
 container.bind<IUserService>(TYPES.UserService).to(UserService)
+
+// infrastructure container
+container.bind<ILogger>(TYPES.Logger).to(WinstonLogger).inSingletonScope();
+container.bind<IServer>(TYPES.Server).to(ExpressServer).inSingletonScope();
+container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB).inSingletonScope();
 
 export { container };

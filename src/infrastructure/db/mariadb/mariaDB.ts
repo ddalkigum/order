@@ -15,16 +15,15 @@ export default class MariaDB implements IDatabase {
     this.logger.info(`Maria database connected: ${this.connection.isConnected}`);
   }
 
-  public async executeSelectQuery <T extends IEntity>(query: string, params: any[]): Promise<T | []> {
-    try {
-      const result = await this.connection.query(query, params);
-      return result ? result : [];
-    } finally {
-      await this.connection.close();
-    }
+  public async executeSelectQuery <T extends IEntity>(query: string, params: any[]): Promise<T | any[]> {
+    this.connection = getConnection();
+    this.logger.debug(`params: ${params}\n query: ${query}`)
+    const result = this.connection.query(query, params);
+    return result ? result : [];
   }
 
   public async executeWriteQuery (query: string, params: any[]): Promise<void> {
+    this.connection = getConnection();
     const masterQueryRunner = this.connection.createQueryRunner('master');
     try {
       this.logger.debug(`Write... params: ${params}\nquery: ${query}`)

@@ -1,5 +1,5 @@
 import cors from 'cors';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 import { inject, injectable } from 'inversify';
 import { IHttpRouter } from '../../domain/router/interface';
@@ -24,10 +24,17 @@ export default class ExpressServer implements IServer {
 
     this.app.use('/api/v1/user', this.userRouter.get())
 
-    // not found error handle
-
-    // error handler
-
+    // transport error - 가능하다면 kafka, 안되면 logstash, sentry, slack etc - 여기선 그냥 던지기만 
+    
+    // error response - response error 
+    this.app.use((error: any, request: Request, response: Response, next: NextFunction) => {
+      console.log('error')
+      console.log(Object.entries(error))
+      response.status(error.statusCode).json({
+        name: error.name,
+        message: error.message
+      })
+    })
     this.app.listen(port)
   }
-}
+};

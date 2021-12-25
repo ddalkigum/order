@@ -1,8 +1,16 @@
 export const TYPES = {
+  // infrastructure types 
   Logger: Symbol.for('Logger'),
   MariaDB: Symbol.for('MariaDB'),
-  UserRouter: Symbol.for('UserRouter'),
   Server: Symbol.for('Server'),
+
+  // domain types
+  UserRouter: Symbol.for('UserRouter'),
+  UserService: Symbol.for('UserService'),
+
+  // common types
   ApiResponse: Symbol.for('ApiResponse'),
-  UserService: Symbol.for('UserService')
+
+  // error types
+  ErrorGenerator: Symbol.for('ErrorGenerator')
 };

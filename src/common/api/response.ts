@@ -1,17 +1,26 @@
 import { NextFunction, Request, Response } from 'express';
 import { injectable } from 'inversify';
-import { IApiResponse } from './interface';
+interface SuccessResponse {
+  status: string;
+  result: any
+}
+
+export interface IApiResponse {
+  generateResponse: (request: Request, response: Response, next: NextFunction, func: any) => Promise<SuccessResponse>
+}
 
 @injectable()
-export default class ApiResponse implements IApiResponse {
+export class ApiResponse implements IApiResponse {
   public async generateResponse (_: Request, response: Response, next: NextFunction, func: any): Promise<any> {
     try {
       const result = await func();
-      response.status(200).json({
+      return response.status(200).json({
         status: 'Success',
         result
       });
     } catch (error) {
+      console.log(error);
+      console.log(error)
       next(error);
     }
   }

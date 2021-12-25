@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
-import { IApiResponse } from '../../common/api/interface';
-import ApiResponse from '../../common/api/response';
+import { ApiResponse, IApiResponse } from '../../common/api/response';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { IUserService } from '../service/user';
