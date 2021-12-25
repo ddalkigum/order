@@ -1,0 +1,15 @@
+ssh ubuntu@3.34.99.99 <<EOF
+  cd ~/order
+  git pull origin master
+  curl -o-   https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh    | bash
+  . ~/.nvm/nvm.sh 
+  npm install 16.2.0
+  npm install
+  npm install -g typescript
+  npm install -g ts-node
+  npm install -g pm2 
+  pm2 install typescript
+  npm run build
+  pm2 reload ecosystem.config.js --env env_development
+  exit
+EOF
