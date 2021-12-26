@@ -1,0 +1,8 @@
+#!/bin/sh
+ssh ubuntu@3.34.99.99 <<EOF
+  cd ~/order
+  git checkout devleop
+  npm install
+  pm2 reload ecosystem.config.js
+  exit
+EOF
