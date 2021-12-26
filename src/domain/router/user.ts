@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
-import { ApiResponse, IApiResponse } from '../../common/api/response';
+import { IApiResponse } from '../../common/api/response';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
+import { checkRequired } from '../../util/checkRequired';
 import { IUserService } from '../service/user';
 
 export interface IHttpRouter {
@@ -26,6 +27,7 @@ export class UserRouter implements IHttpRouter {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         this.logger.debug('Get user...');
         const id = request.params.id as string;
+        checkRequired([id]);
         return await this.userService.getUserDataById(parseInt(id));
       })
     })
@@ -34,7 +36,8 @@ export class UserRouter implements IHttpRouter {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         this.logger.debug('Delete user...');
         const id = request.params.id as string;
-        await this.userService.deleteUserData(parseInt(id));
+        checkRequired([id]);
+        return await this.userService.deleteUserData(parseInt(id));
       })
     })
     
@@ -42,7 +45,8 @@ export class UserRouter implements IHttpRouter {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         this.logger.debug('Create user...');
         const { nickName, phoneNumber } = request.body;
-        await this.userService.insertUserData(nickName, phoneNumber);
+        checkRequired([nickName, phoneNumber]);
+        return await this.userService.insertUserData(nickName, phoneNumber);
       })
     })
   }

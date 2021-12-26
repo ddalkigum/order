@@ -1,7 +1,8 @@
 import { inject, injectable } from 'inversify';
-import { IDatabase } from '../../infrastructure/db/mariadb/interface';
+import { IDatabase } from '../../infrastructure/db/mariadb/mariaDB';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
+import * as UserQuery from '../../infrastructure/db/mariadb/query/user';
 
 interface IUserData {
   id: number;
@@ -11,7 +12,7 @@ interface IUserData {
 
 export interface IUserService {
   getUserDataById: (id: number) => Promise<IUserData>
-  insertUserData: (nickname: string, phoneNumber: string) => Promise<void>;
+  insertUserData: (nickname: string, phoneNumber: string) => Promise<number>;
   deleteUserData: (id: number) => Promise<void>;
 }
 
@@ -21,22 +22,18 @@ export class UserService implements IUserService {
   @inject(TYPES.MariaDB) private mariaDB: IDatabase
 
   public async getUserDataById (id: number): Promise<IUserData> {
-    // get user data by id 
     this.logger.debug(`get user data id: ${id}`);
-    const query = `select * from user where id=?`
-    const userData = await this.mariaDB.executeSelectQuery(query, [id])
+    const userData = await this.mariaDB.executeSelectQuery(UserQuery.getUserData, [id])
     return userData.length === 0 ? 'DoesNotExistUser' : userData[0]
   }
 
-  public async insertUserData (nickName: string, phoneNumber: string): Promise<void> {
+  public async insertUserData (nickName: string, phoneNumber: string): Promise<number> {
     this.logger.debug(`insert user data nick name: ${nickName}, phone number: ${phoneNumber}`);
-    const query = `insert into user (nick_name, phone_number) values (?, ?)`;
-    await this.mariaDB.executeWriteQuery(query, [nickName, phoneNumber]);
+    return await this.mariaDB.executeWriteQuery(UserQuery.insertUserData, [nickName, phoneNumber]);
   }
 
-  public async deleteUserData (id: number): Promise<void> {
+  public async deleteUserData (id: number): Promise<any> {
     this.logger.debug(`delete user data id: ${id}`);
-    const query = `delete from user where id=?`
-    await this.mariaDB.executeWriteQuery(query, [id]);
+    return await this.mariaDB.executeWriteQuery(UserQuery.deleteUserDataById, [id]);
   }
 }

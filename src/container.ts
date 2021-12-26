@@ -4,7 +4,7 @@ import { ApiResponse, IApiResponse } from './common/api/response';
 import { IErrorGenerator, ErrorGenerator } from './common/error/errorGenerator';
 import { UserRouter, IHttpRouter } from './domain/router/user';
 import { IUserService, UserService } from './domain/service/user';
-import { IDatabase } from './infrastructure/db/mariadb/interface';
+import { IDatabase } from './infrastructure/db/mariadb/mariaDB';
 import MariaDB from './infrastructure/db/mariadb/mariaDB';
 import ExpressServer from './infrastructure/express/express';
 import { IServer } from './infrastructure/express/interface';

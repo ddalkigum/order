@@ -19,8 +19,6 @@ export class ApiResponse implements IApiResponse {
         result
       });
     } catch (error) {
-      console.log(error);
-      console.log(error)
       next(error);
     }
   }

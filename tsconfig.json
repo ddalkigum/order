@@ -3,7 +3,7 @@
     "target": "ES6",
     "module": "commonjs",
     "outDir": "dist",
-    "types": ["reflect-metadata"],
+    "types": ["reflect-metadata", "jest"],
     "sourceMap": true,
     "allowJs": true,
     "skipLibCheck": true,
