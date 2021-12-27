@@ -46,7 +46,8 @@ export class UserRouter implements IHttpRouter {
         this.logger.debug('Create user...');
         const { nickName, phoneNumber } = request.body;
         checkRequired([nickName, phoneNumber]);
-        return await this.userService.insertUserData(nickName, phoneNumber);
+        const createdUserID = await this.userService.insertUserData(nickName, phoneNumber);
+        return { id: createdUserID }
       })
     })
   }

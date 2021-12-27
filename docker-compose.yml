@@ -1,6 +1,17 @@
 version: '3.3'
 services: 
-  db:
+  node:
+    build: .
+    container_name: order
+    ports: 
+      - "3000:3000"
+    expose:
+      - "3000"
+    links: 
+      - mariaDB
+    depends_on:
+      - mariaDB
+  mariaDB:
     image: mariadb:10
     command: --default-authentication-plugin=mysql_native_password
     container_name: mariaDB

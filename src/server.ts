@@ -3,7 +3,7 @@ import { ILogger } from './infrastructure/logger/interface';
 import { serverConfig } from './infrastructure/express/expressConfig';
 import { IServer } from './infrastructure/express/interface';
 import { TYPES } from './types';
-import { IDatabase } from './infrastructure/db/mariadb/interface';
+import { IDatabase } from './infrastructure/db/mariadb/mariaDB';
 
 const start = async (): Promise<void> => {
   const logger: ILogger = container.get(TYPES.Logger);

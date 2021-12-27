@@ -24,11 +24,19 @@ export default class ExpressServer implements IServer {
 
     this.app.use('/api/v1/user', this.userRouter.get())
 
+    // notfound error
+    this.app.use((request: Request, response: Response, next: NextFunction) => {
+      const error = new Error('NotFound');
+      error.name = 'Not Found';
+      next(error);
+    })
+
     // transport error 
     
     // error response - response error 
     this.app.use((error: any, request: Request, response: Response, next: NextFunction) => {
-      response.status(error.statusCode).json({
+      const statusCode = error.statusCode || 500;
+      response.status(statusCode).json({
         name: error.name,
         message: error.message
       })

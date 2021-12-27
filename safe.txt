@@ -1,0 +1,66 @@
+// decoded version
+{
+  "vc": {
+    "id": "did:infra:01:PUB_K1_4uqQhiDsXvz3ALinXuLdgf4gLNH7ExabB3jNYAEYcgw2vqwMDG",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://api.passinfra.io/schemas/pcr/001"
+    ],
+    "type": [
+      "VerifiableCredential",
+      "TestCertificate"
+    ],
+    "credentialSubject": {
+      "tg": "840539006",
+      "tt": "LP6464-4",
+      "nm": "ELITechGroup, SARS-CoV-2",
+      "ma": "344",
+      "sc": "2021-08-20T10:03:12Z",
+      "tr": "260515000",
+      "tc": "Inha University Testing Facility at Incheon Airport",
+      "co": "KR",
+      "is": "Incheon Airport",
+      "ci": "did:infra:01:PUB_K1_761atFWGXcTs6PCKDKB1CdsqJaQoVS7v27AGtHAj9ym3B72Wk8"
+    }
+  },
+  "sub": "did:infra:01:PUB_K1_7q17SiwuATTVFNmFZ2hvcnGhLBmRmrnNamGbZfpNfG8gyqxF6N",
+  "ver": "1.0",
+  "iss": "did:infra:01:PUB_K1_6WGrvnuG7xFxCFA4dPrefh93HUdG7d1fjUQNsZXQ6JfRC6G3ZC"
+}
+
+KT에서 EUDCC 형식으로 진행할 것인지, 한국에서 필요한 방식으로 할 것인지 
+-> 질병청에서 원하는 데이터와 EUDCC와는 정책적으로 다르기 때문에 선택이 필요함
+-> 둘다 적용가능하기에는 어려움이 있나? 
+ 
+
+EUDCC가 DID를 사용하지 않는다면? 
+-> 이건 그냥 KT에서 사업 무를려고 하는 얘기 같음
+
+
+EUDCC 형식 
+tg - target - 840539006
+tt - testType - SampleType { ko: '비인두(구인두)도말'}
+nm - testName - ELITechGroup, SARS-CoV-2
+sc - collectionTime - TestTime 
+tr - testResult - Negative
+tc - testCenter - 각각의 병원 
+co - country - KO 고정 
+is - issuer - NIP 
+ci - pcr vc id 
+
+질병청 방식 
+method: RT-PCR
+sampleType - 비인두(구인두) 도말
+result: Negative
+testDate: 
+resultTime: - KT에서 추가로 제공해 주어야 함 
+testRequestCentre: 검사 장소 - issuer 이름 (병원)
+testCentre: issuer 이름 (병원)
+
+method - RT-PCR
+sampleType
+result 
+testDate
+testRequestCentre
+wallet - 'KT' or 'COOV'
+issuer - Korea Disease Control and Prevention Agency

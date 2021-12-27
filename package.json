@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc --build",
     "start": "npm run build && export NODE_ENV=production && node ./dist/server.js",
-    "start:dev": "export NODE_ENV=development && pm2 start ecosystem.config.js --env env_development",
+    "start:dev": "export NODE_ENV=development && nodemon ./src/server.ts",
     "start:local": "export NODE_ENV=local && nodemon ./src/server.ts",
     "docker:start": "docker-compose up -d",
     "test:unit": "NODE_ENV=test && jest --config jest.unit.config.json --detectOpenHandles",

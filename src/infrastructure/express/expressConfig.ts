@@ -1,4 +1,4 @@
-const DEFAULT_PORT = 3000;
+const DEFAULT_PORT = 3030;
 
 interface IServerConfig {
   port: number;
