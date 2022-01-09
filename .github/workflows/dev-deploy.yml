@@ -30,3 +30,4 @@ jobs:
           MARIA_DB_PASSWORD: ${{ secrets.MARIA_DB_PASSWORD }}
           MARIA_DB_HOST: ${{ secrets.MARIA_DB_HOST }}
           MARIA_DB_DATABASE: ${{ secrets.MARIA_DB_DATABASE }}
+          
