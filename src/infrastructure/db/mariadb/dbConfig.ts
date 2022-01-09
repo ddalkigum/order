@@ -3,7 +3,7 @@ const DEFAULT_CONNECTION_LIMIT = 5;
 const DEFAULT_MARIA_DB_USERNAME = 'root';
 const DEFAULT_MARIA_DB_PASSWORD = '1234';
 const DEFAULT_MARIA_DB_HOST = 'localhost';
-const DEFAULT_MARIA_DB_DATABASE = 'order';
+const DEFAULT_MARIA_DB_DATABASE = 'orders';
 
 export interface MariaDBGeneralConfig {
   username: string;
