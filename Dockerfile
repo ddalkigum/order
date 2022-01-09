@@ -1,3 +1,4 @@
+# Deploy for AWS ECR
 FROM node:14.16.1-alpine3.10
 
 ENV LC_ALL ko_KR.UTF-8
