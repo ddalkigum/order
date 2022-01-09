@@ -15,12 +15,12 @@ export interface MariaDBGeneralConfig {
 }
 
 export const dbConfig: MariaDBGeneralConfig = {
-  username: process.env.DEV_MARIA_DB_USERNAME || DEFAULT_MARIA_DB_USERNAME,
-  password: process.env.DEV_MARIA_DB_PASSWORD || DEFAULT_MARIA_DB_PASSWORD,
-  connectionLimit: parseInt(process.env.DEV_MARIA_DB_CONNECTION_LIMIT) | DEFAULT_CONNECTION_LIMIT,
-  host: process.env.DEV_MARIA_DB_HOST || DEFAULT_MARIA_DB_HOST,
-  port: parseInt(process.env.DEV_MARIA_DB_PORT) || DEFAULT_PORT,
-  database: process.env.DEV_MARIA_DB_DATABASE || DEFAULT_MARIA_DB_DATABASE,
+  username: process.env.MARIA_DB_USERNAME || DEFAULT_MARIA_DB_USERNAME,
+  password: process.env.MARIA_DB_PASSWORD || DEFAULT_MARIA_DB_PASSWORD,
+  connectionLimit: parseInt(process.env.MARIA_DB_CONNECTION_LIMIT) | DEFAULT_CONNECTION_LIMIT,
+  host: process.env.MARIA_DB_HOST || DEFAULT_MARIA_DB_HOST,
+  port: parseInt(process.env.MARIA_DB_PORT) || DEFAULT_PORT,
+  database: process.env.MARIA_DB_DATABASE || DEFAULT_MARIA_DB_DATABASE,
 }
 
 console.log(dbConfig);
