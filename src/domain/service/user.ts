@@ -1,6 +1,4 @@
 import { inject, injectable } from 'inversify';
-import { UserInfo } from 'os';
-import { SuccessResponse } from '../../common/api/interface';
 import { IDatabase } from '../../infrastructure/db/mariadb/interface';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
