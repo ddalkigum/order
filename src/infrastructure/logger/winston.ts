@@ -22,7 +22,7 @@ export default class WinstonLogger implements ILogger {
 
   public init = (): boolean => {
     const { combine, timestamp, printf } = winston.format;
-    const logDir = process.env.NODE_ENV === 'production' ? '/logs001' : 'logs';
+    const logDir = 'logs';
 
     const logFormat = printf(({ level, timestamp, message }) => {
       return `${timestamp} ${level}: ${message}`;

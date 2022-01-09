@@ -8,10 +8,10 @@ export const devConnectionOption: ConnectionOptions = {
   type: MARIA_DB,
   synchronize: false,
   logger: 'debug',
-  entities: ['src/infrastructure/db/mariadb/entity/**.ts'],
-  migrations: ['migration/*.{.ts,.js}'],
+  entities: ['./entity/**.{ts,js}'],
   cli: {
     'migrationsDir': 'migration',
   }
 };
+
  
