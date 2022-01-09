@@ -54,7 +54,7 @@
     "object-curly-newline": 0,
     "operator-linebreak": 0,
     "prefer-template": 0,
-    "radix": 0,
+    "radix": 0
   },
   "ignorePatterns": ["node_modules", "**/*.test.*", "dist"]
 }

@@ -4,6 +4,10 @@ export interface IEntity {
 
 export interface IDatabase {
   init: () => Promise<void>;
-  executeSelectQuery: (query: string, params: any[]) => Promise<T | T[]>;
-  executeWriteQuery: (query: string, params: any[]) => Promise<T>;
+  close: () => Promise<void>;
+  executeSelectListQuery: (sql: string, params: any[]) => Promise<T[]>
+  executeSelectQuery: (sql: string, params: any[]) => Promise<T>
+  executeWriteQuery: (sql: string, params: any[]) => Promise<T>
 }
+
+
