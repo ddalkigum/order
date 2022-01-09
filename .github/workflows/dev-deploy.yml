@@ -21,5 +21,7 @@ jobs:
           node-version: '14'
       - name: Install dependencies
         run: npm install
+      - name: create env file 
+        run: touch .env.dev && echo SECRETS=${{ secrets }} >> .env.dev
       - name: Start dev deploy
         run: npm run start:dev
