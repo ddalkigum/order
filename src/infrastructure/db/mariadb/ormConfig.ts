@@ -14,3 +14,4 @@ export const devConnectionOption: ConnectionOptions = {
     'migrationsDir': 'migration',
   }
 };
+ 
