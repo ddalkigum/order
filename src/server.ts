@@ -1,3 +1,4 @@
+import './config';
 import { container } from './container';
 import { ILogger } from './infrastructure/logger/interface';
 import { serverConfig } from './infrastructure/express/expressConfig';

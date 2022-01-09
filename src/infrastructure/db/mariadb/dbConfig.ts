@@ -22,3 +22,5 @@ export const dbConfig: MariaDBGeneralConfig = {
   port: parseInt(process.env.DEV_MARIA_DB_PORT) || DEFAULT_PORT,
   database: process.env.DEV_MARIA_DB_DATABASE || DEFAULT_MARIA_DB_DATABASE,
 }
+
+console.log(dbConfig);
