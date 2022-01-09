@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+      - name: Install pm2 && pm2 dependency
+        run: npm install -g pm2 && pm2 install typescript
       - name: Install dependencies
         run: npm install
       - name: create env file 
