@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import { inject, injectable } from 'inversify';
-import { IHttpRouter } from '../../domain/router/interface';
+import { IHttpRouter } from '../../domain/user/interface';
 import { TYPES } from '../../types';
 import { IServer } from './interface';
 
