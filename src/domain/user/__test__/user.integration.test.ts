@@ -3,20 +3,26 @@ import { container } from '../../../container';
 import { TYPES } from '../../../types';
 import { IDatabase } from '../../../infrastructure/db/mariadb/interface';
 import { testHelper } from './helper';
+import { ILogger } from '../../../infrastructure/logger/interface';
 
 const TEST_USER_TABLE = 'users_test';
 
 const server: any = container.get(TYPES.Server);
+const logger: ILogger = container.get(TYPES.Logger);
 const db: IDatabase = container.get(TYPES.MariaDB);
 
 beforeAll(async () => {
   // initialize server middleware, router
   server.set();
+
+  // hide debug logging
+  jest.spyOn(logger, 'debug').mockImplementation(() => null);
   await db.init();
 });
 
 afterAll(async () => {
   await db.truncate(TEST_USER_TABLE);
+  jest.clearAllMocks();
   await db.close();
 });
 
