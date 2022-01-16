@@ -1,12 +1,11 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { IApiResponse } from '../../common/api/interface';
-import ApiResponse from '../../common/api/response';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
-import { IUserService } from '../service/user';
-import { IHttpRouter } from './interface';
+import { IHttpRouter, IUserService } from './interface';
 
+// @ts-ignore
 @injectable()
 export default class UserRouter implements IHttpRouter {
   @inject(TYPES.Logger) private logger: ILogger;
@@ -18,30 +17,30 @@ export default class UserRouter implements IHttpRouter {
   public init() {
     this.router.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
-        this.logger.debug('Get user...')
+        this.logger.debug('Get user...');
         const id = request.params.id as string;
         return await this.userService.getUserDataById(parseInt(id));
-      })
-    })
+      });
+    });
 
     this.router.post('', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
-        this.logger.debug('Create user...')
-        const { nickName, phoneNumber } = request.body;
-        await this.userService.insertUserData(nickName, phoneNumber);
-      })
-    })
+        this.logger.debug('Create user...');
+        const { userData } = request.body;
+        return await this.userService.insertUserData(userData);
+      });
+    });
 
     this.router.delete('/:id', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
-        this.logger.debug('Delete user...')
+        this.logger.debug('Delete user...');
         const id = request.params.id as string;
         await this.userService.deleteUserData(parseInt(id));
-      })
-    })
+      });
+    });
   }
 
   public get() {
-    return this.router.bind(this)
+    return this.router.bind(this);
   }
 }

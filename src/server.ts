@@ -13,7 +13,8 @@ const start = async (): Promise<void> => {
   await db.init();
 
   const server: IServer = container.get(TYPES.Server);
-  await server.start(serverConfig.port);
+  server.set();
+  server.start(serverConfig.port);
 
   logger.info(`Server on ${serverConfig.port}, environment: ${process.env.NODE_ENV}`);
 };

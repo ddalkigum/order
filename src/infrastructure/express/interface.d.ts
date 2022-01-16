@@ -1,3 +1,4 @@
 export interface IServer {
-  start: (port: number) => Promise<void>;
+  set: () => void;
+  start: (port: number) => void;
 }

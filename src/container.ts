@@ -1,10 +1,10 @@
-import { Container } from 'inversify';
 import 'reflect-metadata';
+import { Container } from 'inversify';
 import { IApiResponse } from './common/api/interface';
 import ApiResponse from './common/api/response';
-import { IHttpRouter } from './domain/router/interface';
-import UserRouter from './domain/router/user';
-import { IUserService, UserService } from './domain/service/user';
+import { IHttpRouter, IUserRepository, IUserService } from './domain/user/interface';
+import UserRouter from './domain/user/router';
+import { UserService } from './domain/user/service';
 import { IDatabase } from './infrastructure/db/mariadb/interface';
 import MariaDB from './infrastructure/db/mariadb/mariaDB';
 import ExpressServer from './infrastructure/express/express';
@@ -12,24 +12,20 @@ import { IServer } from './infrastructure/express/interface';
 import { ILogger } from './infrastructure/logger/interface';
 import WinstonLogger from './infrastructure/logger/winston';
 import { TYPES } from './types';
+import UserRepository from './domain/user/repository';
 
 const container = new Container();
-// logger container 
+// Infrastructure
 container.bind<ILogger>(TYPES.Logger).to(WinstonLogger).inSingletonScope();
-
-// db container
 container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB).inSingletonScope();
-
-// router container 
-container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter).inSingletonScope();
-
-// server container
 container.bind<IServer>(TYPES.Server).to(ExpressServer).inSingletonScope();
 
-// common container 
+// Common container 
 container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse).inSingletonScope();
 
-// service container 
+// User container
+container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter).inSingletonScope();
 container.bind<IUserService>(TYPES.UserService).to(UserService)
+container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository)
 
 export { container };
