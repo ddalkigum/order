@@ -3,9 +3,9 @@ import { inject, injectable } from 'inversify';
 import { IApiResponse } from '../../common/api/interface';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
-import { IUserService } from './service';
-import { IHttpRouter } from './interface';
+import { IHttpRouter, IUserService } from './interface';
 
+// @ts-ignore
 @injectable()
 export default class UserRouter implements IHttpRouter {
   @inject(TYPES.Logger) private logger: ILogger;
@@ -26,8 +26,8 @@ export default class UserRouter implements IHttpRouter {
     this.router.post('', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         this.logger.debug('Create user...')
-        const { nickName, phoneNumber } = request.body;
-        await this.userService.insertUserData(nickName, phoneNumber);
+        const { userData } = request.body;
+        await this.userService.insertUserData(userData);
       })
     })
 

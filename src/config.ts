@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 
 const path: string = process.env.NODE_ENV === 'development' ? '.env.dev' : '.env';
-console.log(`path: ${path}`)
 const envFound = dotenv.config({ path });
 
-console.log(envFound);
+export const config = {
+  baseURL: process.env.BASE_URL || 'http://localhost:3000'
+}
 
 if (!envFound || envFound.error) {
   throw new Error(`Couldn't find ${path} file`);
