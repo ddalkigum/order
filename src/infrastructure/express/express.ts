@@ -14,23 +14,25 @@ export default class ExpressServer implements IServer {
 
   private app = express();
 
-  public async start (port: number): Promise<void> {
-    // middleware 
-    this.app.use(helmet())
+  public set(): void {
+    // middleware
+    this.app.use(helmet());
     this.app.use(cors());
     this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: false }));  
+    this.app.use(express.urlencoded({ extended: false }));
 
-    // route init 
+    // route init
     this.userRouter.init();
 
-    this.app.use('/api/v1/user', this.userRouter.get())
+    this.app.use('/api/v1/user', this.userRouter.get());
 
     // not found error handle
 
     // error handler
-    this.app.use(generalErrorHandler)
+    this.app.use(generalErrorHandler);
+  }
 
-    this.app.listen(port)
+  public start(port: number): void {
+    this.app.listen(port);
   }
 }

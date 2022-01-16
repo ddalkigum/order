@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import UserEntity from '../../infrastructure/db/mariaDB/entity/users';
-import { IEntity } from '../../infrastructure/db/mariadb/interface';
 
 export interface IHttpRouter {
   init: () => void;
@@ -8,19 +7,19 @@ export interface IHttpRouter {
 }
 
 export interface IInsertUserData {
-  nick_name: string;
+  nickname: string;
   phone_number: string;
   encrypted_ci: string;
 }
 
 export interface IUserData {
-  nickName: string;
+  nickname: string;
   phoneNumber: string;
-  ci: string
+  ci: string;
 }
 
 export interface IUpdateUserData extends IInsertUserData {
-  id: number
+  id: number;
 }
 
 export interface IUserRepository {

@@ -12,7 +12,7 @@ export default class UserEntity {
   phone_number: string;
 
   @Column({ type: 'varchar', length: '50' })
-  nick_name: string
+  nickname: string;
 
   @Column({ type: 'varchar', length: 60, nullable: false })
   encrypted_ci: string;
@@ -22,4 +22,4 @@ export default class UserEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updated_at: Date;
-};
+}
