@@ -60,14 +60,26 @@ describe('User integration test', () => {
     });
   });
 
-  test('Get user should return user entity', async () => {
-    await request(server.app)
-      .get(`/api/v1/user/${id}`)
-      .expect(200)
-      .expect((response) => {
-        const { status, result } = response.body;
-        expect(status).toEqual('Success');
-        expect(result.phone_number).toEqual(testHelper.router.userDataForUpdate.phoneNumber);
-      });
+  describe('Get user test', () => {
+    test('Get user should return user entity', async () => {
+      await request(server.app)
+        .get(`/api/v1/user/${id}`)
+        .expect(200)
+        .expect((response) => {
+          const { status, result } = response.body;
+          expect(status).toEqual('Success');
+          expect(result.phone_number).toEqual(testHelper.router.userDataForUpdate.phoneNumber);
+        });
+    });
+  });
+
+  describe('Delete user test', () => {
+    test('Should return success status', async () => {
+      await request(server.app)
+        .delete(`/api/v1/user/${id}`)
+        .expect((response) => {
+          expect(response.body.status).toEqual('Success');
+        });
+    });
   });
 });
