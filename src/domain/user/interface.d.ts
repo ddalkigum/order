@@ -1,10 +1,4 @@
-import { Router } from 'express';
-import UserEntity from '../../infrastructure/db/mariaDB/entity/users';
-
-export interface IHttpRouter {
-  init: () => void;
-  get: () => Router;
-}
+import UserEntity from '../../infrastructure/db/mariaDB/entity/user/users';
 
 export interface IInsertUserData {
   nickname: string;

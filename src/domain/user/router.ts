@@ -3,7 +3,8 @@ import { inject, injectable } from 'inversify';
 import { IApiResponse } from '../../common/api/interface';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
-import { IHttpRouter, IUserService } from './interface';
+import { IHttpRouter } from '../interface';
+import { IUserService } from './interface';
 
 // @ts-ignore
 @injectable()

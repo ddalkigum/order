@@ -1,5 +1,5 @@
 import { inject, injectable } from 'inversify';
-import UserEntity from '../../infrastructure/db/mariaDB/entity/users';
+import UserEntity from '../../infrastructure/db/mariaDB/entity/user/users';
 import { IDatabase } from '../../infrastructure/db/mariadb/interface';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
@@ -18,8 +18,6 @@ export class UserService implements IUserService {
   @inject(TYPES.Logger) private logger: ILogger;
   @inject(TYPES.MariaDB) private mariaDB: IDatabase;
   @inject(TYPES.UserRepository) private userRepository: IUserRepository;
-
-  tableName = 'users';
 
   public async getUserDataById(id: number): Promise<UserEntity> {
     // Get user data

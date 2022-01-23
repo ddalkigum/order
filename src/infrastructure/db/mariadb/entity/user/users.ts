@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 const { NODE_ENV } = process.env;
 const name = NODE_ENV === 'test' ? 'users_test' : 'users';
@@ -15,6 +15,7 @@ export default class UserEntity {
   nickname: string;
 
   @Column({ type: 'varchar', length: 60, nullable: false })
+  @Index('idx_encrypted_ci')
   encrypted_ci: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
