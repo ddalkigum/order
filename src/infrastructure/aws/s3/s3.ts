@@ -39,7 +39,7 @@ export class AWSS3 implements IAWSS3 {
 
   public upload = () => {
     const s3 = new AWS.S3({ accessKeyId: awsConfig.id, secretAccessKey: awsConfig.password });
-    const logPath = path.join(__dirname, `../../../../../logs/${getTodayFormatYYYYMMDD}.log`);
+    const logPath = path.join(__dirname, `../../../../logs/${getTodayFormatYYYYMMDD()}.log`);
     this.logger.debug(`Log path: ${logPath}`);
     // const errorLogPath = path.join(__dirname + `../../../../../logs/error/${getTodayFormatYYYYMMDD}.log`)
     const uploadFile = (fileName: string) => {
