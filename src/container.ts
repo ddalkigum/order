@@ -13,19 +13,29 @@ import { ILogger } from './infrastructure/logger/interface';
 import WinstonLogger from './infrastructure/logger/winston';
 import { TYPES } from './types';
 import UserRepository from './domain/user/repository';
+import { IMorganLogger, MorganLogger } from './infrastructure/logger/morgan';
+import { StoreRouter } from './domain/store/router';
+import { IStoreService, StoreService } from './domain/store/service';
+import { IStoreRepository, StoreRepository } from './domain/store/repository';
 
-const container = new Container();
+const container = new Container({ defaultScope: 'Singleton' });
 // Infrastructure
-container.bind<ILogger>(TYPES.Logger).to(WinstonLogger).inSingletonScope();
-container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB).inSingletonScope();
-container.bind<IServer>(TYPES.Server).to(ExpressServer).inSingletonScope();
+container.bind<ILogger>(TYPES.Logger).to(WinstonLogger);
+container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB);
+container.bind<IServer>(TYPES.Server).to(ExpressServer);
+container.bind<IMorganLogger>(TYPES.MorganLogger).to(MorganLogger);
 
-// Common container 
-container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse).inSingletonScope();
+// Common container
+container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse);
 
 // User container
-container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter).inSingletonScope();
-container.bind<IUserService>(TYPES.UserService).to(UserService)
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository)
+container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter);
+container.bind<IUserService>(TYPES.UserService).to(UserService);
+container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
+
+// Store container
+container.bind<IHttpRouter>(TYPES.StoreRouter).to(StoreRouter);
+container.bind<IStoreService>(TYPES.StoreService).to(StoreService);
+container.bind<IStoreRepository>(TYPES.StoreRepository).to(StoreRepository);
 
 export { container };

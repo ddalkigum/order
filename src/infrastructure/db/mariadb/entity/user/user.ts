@@ -1,7 +1,9 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import BasketEntity from '../order/basket';
+import UserAddressEntity from './userAddress';
 
 const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'users_test' : 'users';
+const name = NODE_ENV === 'test' ? 'user_test' : 'user';
 
 @Entity({ name })
 export default class UserEntity {
@@ -22,4 +24,10 @@ export default class UserEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updated_at: Date;
+
+  @OneToMany(() => BasketEntity, (basket) => basket.user, { onDelete: 'CASCADE', nullable: true })
+  basket?: BasketEntity[];
+
+  @OneToMany(() => UserAddressEntity, (address) => address.user, { cascade: true })
+  address?: UserAddressEntity[];
 }

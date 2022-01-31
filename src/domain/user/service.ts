@@ -1,6 +1,5 @@
 import { inject, injectable } from 'inversify';
-import UserEntity from '../../infrastructure/db/mariaDB/entity/users';
-import { IDatabase } from '../../infrastructure/db/mariadb/interface';
+import UserEntity from '../../infrastructure/db/mariaDB/entity/user/user';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { checkRequired } from '../../util/checkRequired';
@@ -16,7 +15,6 @@ export interface UserData {
 @injectable()
 export class UserService implements IUserService {
   @inject(TYPES.Logger) private logger: ILogger;
-  @inject(TYPES.MariaDB) private mariaDB: IDatabase;
   @inject(TYPES.UserRepository) private userRepository: IUserRepository;
 
   tableName = 'users';

@@ -11,6 +11,7 @@ import { IServer } from './interface';
 @injectable()
 export default class ExpressServer implements IServer {
   @inject(TYPES.UserRouter) private userRouter: IHttpRouter;
+  @inject(TYPES.StoreRouter) private storeRouter: IHttpRouter;
 
   private app = express();
 
@@ -23,8 +24,10 @@ export default class ExpressServer implements IServer {
 
     // route init
     this.userRouter.init();
+    this.storeRouter.init();
 
     this.app.use('/api/v1/user', this.userRouter.get());
+    this.app.use('/api/v1/store', this.storeRouter.get());
 
     // not found error handle
 
