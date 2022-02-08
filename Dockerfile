@@ -1,5 +1,5 @@
 # Deploy for AWS ECR
-FROM node:14.16.1-alpine3.10
+FROM node:16
 
 ENV LC_ALL ko_KR.UTF-8
 ENV TZ=Asia/Seoul
@@ -10,14 +10,7 @@ ENV LD_LIBRARY_PATH=/lib
 ENV NLS_LANG=korean_korea.utf8
 
 # Create Directory for container
-WORKDIR /usr/app/src
-
-# Install typescript global 
-RUN npm install -g typescript
-
-# Install pm2 
-RUN npm install -g pm2 
-RUN pm2 install typescript
+WORKDIR /app
 
 # Copy package.json
 COPY package.json .
@@ -25,8 +18,9 @@ COPY package.json .
 # Install package 
 RUN npm install
 
-ADD . /usr/app/src
+ADD . /app
 
+CMD ["npm", "run", "build"]
 CMD ["npm", "run", "start:dev"]
 
 EXPOSE 3000
