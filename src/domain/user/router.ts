@@ -16,6 +16,12 @@ export default class UserRouter implements IHttpRouter {
   private router = Router();
 
   public init() {
+    this.router.get('/health', async (request: Request, response: Response, next: NextFunction) => {
+      await this.apiResponse.generateResponse(request, response, next, async () => {
+        return 'Success';
+      });
+    });
+
     this.router.get('/login', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         const token = request.query.token as string;
