@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { IApiResponse } from '../../common/api/interface';
@@ -15,6 +16,15 @@ export default class UserRouter implements IHttpRouter {
   private router = Router();
 
   public init() {
+    this.router.get('/login', async (request: Request, response: Response, next: NextFunction) => {
+      await this.apiResponse.generateResponse(request, response, next, async () => {
+        const token = request.query.token as string;
+        const verifiedToken = jwt.verify(token, 'order') as any;
+        this.logger.debug(`token: ${token}`);
+        return await this.userService.getUserDataById(parseInt(verifiedToken.id));
+      });
+    });
+
     this.router.get('/:id', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         this.logger.debug('Get user...');

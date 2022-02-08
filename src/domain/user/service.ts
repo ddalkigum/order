@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { inject, injectable } from 'inversify';
 import UserEntity from '../../infrastructure/db/mariaDB/entity/user/user';
 import { ILogger } from '../../infrastructure/logger/interface';
@@ -5,6 +6,7 @@ import { TYPES } from '../../types';
 import { checkRequired } from '../../util/checkRequired';
 import { encryptWithSHA256 } from '../../util/crypto';
 import { IInsertUserData, IUserData, IUserRepository, IUserService } from './interface';
+import { config } from '../../config';
 
 export interface UserData {
   phone_number: string;
@@ -29,7 +31,7 @@ export class UserService implements IUserService {
     throw new Error('Does not exist user');
   }
 
-  public async insertUserData(userData: IUserData): Promise<UserEntity> {
+  public async insertUserData(userData: IUserData): Promise<string> {
     const { phoneNumber, nickname, ci } = userData;
     checkRequired([phoneNumber, nickname, ci]);
     this.logger.debug(`phoneNumber: ${phoneNumber}, nickname: ${nickname}`);
@@ -51,7 +53,10 @@ export class UserService implements IUserService {
 
     if (!userFound) {
       // 3-1 Insert user if the user is not registered
-      return await this.userRepository.insertUserData(insertUserData);
+      const userData = await this.userRepository.insertUserData(insertUserData);
+      const { id } = userData;
+      const token = jwt.sign({ id }, config.jwtSignKey);
+      return token;
     }
 
     // 3-2 Update user if not matched user's phone number
@@ -60,7 +65,10 @@ export class UserService implements IUserService {
       userFound.updated_at = new Date();
       return await this.userRepository.updateUserData(userFound);
     }
-    return userFound;
+
+    // create user token
+    const token = jwt.sign({ id: userFound.id }, config.jwtSignKey);
+    return token;
   }
 
   public async deleteUserData(id: number): Promise<void> {

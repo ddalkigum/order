@@ -32,6 +32,6 @@ export interface IUserRepository {
 
 export interface IUserService {
   getUserDataById: (id: number) => Promise<UserEntity>;
-  insertUserData: (data: IUserData) => Promise<T>;
+  insertUserData: (data: IUserData) => Promise<string>;
   deleteUserData: (id: number) => Promise<void>;
 }

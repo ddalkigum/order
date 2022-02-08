@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import UserEntity from './user';
 
 const { NODE_ENV } = process.env;
@@ -12,11 +12,9 @@ export default class UserAddressEntity {
   @Column({ type: 'varchar' })
   address: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 8 })
-  latitude: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 6 })
-  longitude: number;
+  @Column({ type: 'point', srid: 4326 })
+  @Index('sx_user_location', { spatial: true })
+  location: number[];
 
   @Column({ type: 'tinyint', default: 0 })
   main: number;

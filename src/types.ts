@@ -1,9 +1,10 @@
 export const TYPES = {
   // Infrastructure
   Logger: Symbol.for('Logger'),
-  MariaDB: Symbol.for('MariaDB'),
   Server: Symbol.for('Server'),
   MorganLogger: Symbol.for('MorganLogger'),
+  MariaDB: Symbol.for('MariaDB'),
+  MongoDB: Symbol.for('MongoDB'),
 
   // Common
   ApiResponse: Symbol.for('ApiResponse'),

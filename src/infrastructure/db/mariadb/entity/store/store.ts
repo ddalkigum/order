@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import MenuEntity from '../menu/menu';
 import BasketEntity from '../order/basket';
 import OwnerEntity from '../user/owner';
@@ -11,6 +11,9 @@ const name = NODE_ENV === 'test' ? 'store_test' : 'store';
 export default class StoreEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
+
+  @Column({ type: 'varchar', length: 50 })
+  name: string;
 
   @Column({ type: 'varchar', length: 500 })
   description: string;
@@ -27,11 +30,9 @@ export default class StoreEntity {
   @Column({ type: 'varchar', length: 50 })
   address: string;
 
-  @Column({ type: 'decimal', precision: 10, scale: 8 })
-  latitude: number;
-
-  @Column({ type: 'decimal', precision: 10, scale: 6 })
-  longitude: number;
+  @Column({ type: 'point', srid: 4326 })
+  @Index('sx_store_location', { spatial: true })
+  location: ArrayBuffer;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
   created_at: Date;
@@ -39,13 +40,13 @@ export default class StoreEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updated_at: Date;
 
-  @ManyToOne(() => StoreCategoryEntity, (category) => category.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => StoreCategoryEntity, (category) => category.id, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ name: 'category_id' })
-  category: StoreCategoryEntity;
+  category: number;
 
-  @ManyToOne(() => OwnerEntity, (owner) => owner.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => OwnerEntity, (owner) => owner.id, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ name: 'owner_id' })
-  owner: OwnerEntity;
+  owner: number;
 
   @OneToMany(() => BasketEntity, (basket) => basket.store, { cascade: true, nullable: true })
   basket?: BasketEntity[];

@@ -1,7 +1,7 @@
 import { encryptWithSHA256 } from '../../../util/crypto';
 
 export const testHelper = {
-  tableName: 'users_test',
+  tableName: 'user_test',
 
   repository: {
     userData: {

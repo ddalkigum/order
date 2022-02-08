@@ -28,6 +28,6 @@ export default class UserRepository implements IUserRepository {
   }
 
   public async updateUserData(data: IUpdateUserData): Promise<UserEntity> {
-    return await this.db.updateData(USER_TABLE, data);
+    return await this.db.updateData(USER_TABLE, data.id, data);
   }
 }

@@ -1,11 +1,12 @@
 import request from 'supertest';
+import jwt from 'jsonwebtoken';
 import { container } from '../../../container';
 import { TYPES } from '../../../types';
 import { IDatabase } from '../../../infrastructure/db/mariadb/interface';
 import { testHelper } from './helper';
 import { ILogger } from '../../../infrastructure/logger/interface';
 
-const TEST_USER_TABLE = 'users_test';
+const TEST_USER_TABLE = 'user_test';
 
 const server: any = container.get(TYPES.Server);
 const logger: ILogger = container.get(TYPES.Logger);
@@ -35,7 +36,9 @@ describe('User integration test', () => {
         .send({ userData: testHelper.router.userData })
         .expect(200)
         .expect((response) => {
-          id = response.body.result.id;
+          const token = response.body.result;
+          const verified = jwt.verify(token, 'order') as any;
+          id = verified.id;
           expect(response.body.status).toEqual('Success');
         });
     });

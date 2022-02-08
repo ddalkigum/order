@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Connection, createConnection, InsertResult, ObjectLiteral } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { ISearchStoreOption } from '../../../domain/store/service';
 import { TYPES } from '../../../types';
 import { ILogger } from '../../logger/interface';
 import MenuEntity from './entity/menu/menu';
@@ -8,6 +9,7 @@ import StoreEntity from './entity/store/store';
 import UserEntity from './entity/user/user';
 import { IDatabase, IEntity } from './interface';
 import { devConnectionOption } from './ormConfig';
+import { getStoreQueryBySearch } from './query';
 
 const getEntityByTableName = (table: string) => {
   switch (table) {
@@ -56,39 +58,34 @@ export default class MariaDB implements IDatabase {
   }
 
   public async getDataById<T extends IEntity>(table: string, id: number | string): Promise<T> {
-    try {
-      const EntityClass = getEntityByTableName(table);
-      const result = await this.connection.createQueryBuilder<T>(EntityClass, table).where({ id }).getOne();
-      return result;
-    } finally {
-      // await this.connection
-    }
+    const EntityClass = getEntityByTableName(table);
+    const result = await this.connection.createQueryBuilder<T>(EntityClass, table).where({ id }).getOne();
+    return result;
   }
 
   public async getDataByColumn<T extends IEntity>(table: string, columnCondition: ColumnCondition<T>): Promise<T> {
-    try {
-      const EntityClass = getEntityByTableName(table);
-      const objectLiteral = convertGetDataColumnCondition(columnCondition);
-      this.logger.debug(`objectLiteral: ${JSON.stringify(objectLiteral)}`);
-      const result = await this.connection.createQueryBuilder<T>(EntityClass, table).where(objectLiteral).getOne();
-      return result;
-    } finally {
-      // await this.close();
-    }
+    const EntityClass = getEntityByTableName(table);
+    const objectLiteral = convertGetDataColumnCondition(columnCondition);
+    const result = await this.connection.createQueryBuilder<T>(EntityClass, table).where(objectLiteral).getOne();
+    return result;
   }
+
+  public getDataFromUserLocationSortByNearest = async (table: string, location: string, options: ISearchStoreOption) => {
+    try {
+      const query = getStoreQueryBySearch(location, options);
+      const result = await this.connection.query(query);
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   public getDataUsingInnerJoin = async <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>) => {
     const queryRunner = this.connection.createQueryRunner();
     const EntityClass1 = getEntityByTableName(table1);
-    const EntityClass2 = getEntityByTableName(table2);
     const objectLiteral = convertGetDataColumnCondition(columnCondition);
 
-    const result = await this.connection
-      .createQueryBuilder<T>(EntityClass1, table1)
-      .setQueryRunner(queryRunner)
-      .innerJoinAndSelect(EntityClass2, `${table1}.id = ${table2}.${table1}_id`)
-      .where(objectLiteral)
-      .getMany();
+    const result = await this.connection.createQueryBuilder<T>(EntityClass1, table1).setQueryRunner(queryRunner).leftJoinAndSelect(`${table1}.${table2}`, table2).where(objectLiteral).getOne();
     return result;
   };
 
@@ -107,6 +104,35 @@ export default class MariaDB implements IDatabase {
       await queryRunner.release();
     }
   }
+
+  public insertLocation = async (table: string, data) => {
+    const queryRunner = this.connection.createQueryRunner();
+    try {
+      const EntityClass = getEntityByTableName(table);
+      await queryRunner.startTransaction();
+      const objectLiteral = convertGetDataColumnCondition(data);
+      const location = () => {
+        return `POINT(${data.longitude}, ${data.latitude})`;
+      };
+
+      await this.connection
+        .createQueryBuilder<StoreEntity>(EntityClass, table)
+        .setQueryRunner(queryRunner)
+        .insert()
+        .values({
+          ...objectLiteral,
+          location,
+        })
+        .execute();
+      await queryRunner.commitTransaction();
+      return data;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  };
 
   public async insertWithoutId<T extends IEntity>(table: string, row: Omit<T, 'id'>): Promise<T> {
     const queryRunner = this.connection.createQueryRunner();
@@ -139,7 +165,7 @@ export default class MariaDB implements IDatabase {
     }
   }
 
-  public async updateData<T extends IEntity>(table: string, row: Partial<T>): Promise<Partial<T>> {
+  public async updateData<T extends IEntity>(table: string, id: number, row: Partial<T>): Promise<Partial<T>> {
     const queryRunner = this.connection.createQueryRunner();
     try {
       const EntityClass = getEntityByTableName(table);
@@ -148,7 +174,7 @@ export default class MariaDB implements IDatabase {
         .createQueryBuilder<T>(EntityClass, table)
         .update()
         .set(row as unknown as QueryDeepPartialEntity<T>)
-        .where({ id: row.id })
+        .where({ id })
         .execute();
       await queryRunner.commitTransaction();
       return row;

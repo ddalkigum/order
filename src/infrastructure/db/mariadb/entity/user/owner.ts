@@ -6,7 +6,7 @@ const name = NODE_ENV === 'test' ? 'owner_test' : 'owner';
 
 @Entity({ name })
 export default class OwnerEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
   @Column({ type: 'varchar', length: '50' })

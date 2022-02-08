@@ -5,12 +5,12 @@ import { IApiResponse } from './interface';
 // @ts-ignore
 @injectable()
 export default class ApiResponse implements IApiResponse {
-  public async generateResponse (_: Request, response: Response, next: NextFunction, func: any): Promise<any> {
+  public async generateResponse(request: Request, response: Response, next: NextFunction, func: any): Promise<any> {
     try {
       const result = await func();
       response.status(200).json({
         status: 'Success',
-        result
+        result,
       });
     } catch (error) {
       next(error);
