@@ -1,10 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import StoreEntity from './store';
 
-const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'store_category_test' : 'store_category';
-
-@Entity({ name })
+@Entity({ name: 'storeCategory' })
 export default class StoreCategoryEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
@@ -15,6 +12,6 @@ export default class StoreCategoryEntity {
   @Column({ type: 'varchar', length: '200' })
   icon: string;
 
-  @OneToMany(() => StoreEntity, (store) => store.category, { nullable: true })
+  @OneToMany(() => StoreEntity, (store) => store.id, { nullable: true })
   store?: StoreEntity[];
 }

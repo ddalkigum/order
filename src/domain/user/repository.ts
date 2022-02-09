@@ -2,32 +2,19 @@ import { inject, injectable } from 'inversify';
 import UserEntity from '../../infrastructure/db/mariaDB/entity/user/user';
 import { IDatabase } from '../../infrastructure/db/mariaDB/mariaDB';
 import { TYPES } from '../../types';
-import { IInsertUserData, IUserRepository } from './interface';
 
 export const USER_TABLE = 'user';
 
+export interface IUserRepository {
+  getUserDataById: (id: number) => Promise<UserEntity>;
+  getUserDataByEncryptedCI: (encryptedCI: string) => Promise<UserEntity>;
+  insertUserData: (data: any) => Promise<UserEntity>;
+  deleteUserDataById: (id: number) => Promise<void>;
+  updateUserData: (data: any) => Promise<UserEntity>;
+}
+
 // @ts-ignore
 @injectable()
-export default class UserRepository implements IUserRepository {
+export class UserRepository {
   @inject(TYPES.MariaDB) private db: IDatabase;
-
-  public async getUserDataById(id: number): Promise<UserEntity> {
-    return await this.db.getDataById(USER_TABLE, id);
-  }
-
-  public async getUserDataByEncryptedCI(encryptedCI: string): Promise<UserEntity> {
-    return await this.db.getDataByColumn(USER_TABLE, { encrypted_ci: encryptedCI });
-  }
-
-  public async insertUserData(data: IInsertUserData): Promise<UserEntity> {
-    return await this.db.insertWithoutId(USER_TABLE, { ...data, created_at: new Date(), updated_at: new Date() });
-  }
-
-  public async deleteUserDataById(id: number): Promise<void> {
-    return await this.db.deleteDataById(USER_TABLE, id);
-  }
-
-  public async updateUserData(data: Partial<UserEntity>): Promise<UserEntity> {
-    return await this.db.updateData(USER_TABLE, data.id, data);
-  }
 }

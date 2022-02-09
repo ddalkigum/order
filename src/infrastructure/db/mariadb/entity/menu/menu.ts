@@ -3,10 +3,7 @@ import BasketEntity from '../order/basket';
 import StoreEntity from '../store/store';
 import MenuCategoryEntity from './category';
 
-const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'menu_test' : 'menu';
-
-@Entity({ name })
+@Entity({ name: 'menu' })
 export default class MenuEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;

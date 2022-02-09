@@ -1,27 +1,27 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import BasketEntity from './basket';
 
-const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'order_test' : 'order';
-
-@Entity({ name })
+@Entity({ name: 'order' })
 export default class OrderEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
   @Column({ type: 'varchar', length: 100 })
-  requestForOwner: string;
+  storeRequestContext: string;
 
   @Column({ type: 'varchar', length: 100 })
-  requestForRider: string;
+  riderRequestContext: string;
+
+  @Column({ type: 'varchar', length: '1' })
+  status: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
-  updated_at: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => BasketEntity, (basket) => basket.id, { onDelete: 'CASCADE', nullable: true })
-  @JoinColumn({ name: 'basket_id' })
-  basket: BasketEntity;
+  @JoinColumn({ name: 'basketId' })
+  basketId: BasketEntity;
 }

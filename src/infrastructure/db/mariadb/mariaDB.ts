@@ -56,7 +56,7 @@ const convertGetDataColumnCondition = <T extends IEntity>(columnCondition: Colum
 
 // @ts-ignore
 @injectable()
-export default class MariaDB implements IDatabase {
+export class MariaDB implements IDatabase {
   @inject(TYPES.Logger) private logger: ILogger;
   private connection?: Connection;
 

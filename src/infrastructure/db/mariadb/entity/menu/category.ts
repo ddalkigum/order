@@ -1,10 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import MenuEntity from './menu';
 
-const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'menu_category_test' : 'menu_category';
-
-@Entity({ name })
+@Entity({ name: 'menu_category' })
 export default class MenuCategoryEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;

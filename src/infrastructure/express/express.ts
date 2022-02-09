@@ -3,7 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import { inject, injectable } from 'inversify';
 import { generalErrorHandler } from '../../common/error/handler';
-import { IHttpRouter } from '../../domain/user/interface';
+import { IHttpRouter } from '../../domain/interface';
 import { TYPES } from '../../types';
 import { IServer } from './interface';
 

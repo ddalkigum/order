@@ -6,7 +6,7 @@ import { IDatabase } from '../../../infrastructure/db/mariaDB/mariaDB';
 import { testHelper } from './helper';
 import { ILogger } from '../../../infrastructure/logger/interface';
 
-const TEST_USER_TABLE = 'user_test';
+const TEST_USER_TABLE = 'user';
 
 const server: any = container.get(TYPES.Server);
 const logger: ILogger = container.get(TYPES.Logger);

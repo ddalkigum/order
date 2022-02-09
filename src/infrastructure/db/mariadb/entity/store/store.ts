@@ -1,13 +1,10 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import MenuEntity from '../menu/menu';
 import BasketEntity from '../order/basket';
-import OwnerEntity from '../user/owner';
+import UserEntity from '../user/user';
 import StoreCategoryEntity from './category';
 
-const { NODE_ENV } = process.env;
-const name = NODE_ENV === 'test' ? 'store_test' : 'store';
-
-@Entity({ name })
+@Entity({ name: 'store' })
 export default class StoreEntity {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
@@ -41,12 +38,12 @@ export default class StoreEntity {
   updated_at: Date;
 
   @ManyToOne(() => StoreCategoryEntity, (category) => category.id, { onDelete: 'CASCADE', nullable: false })
-  @JoinColumn({ name: 'category_id' })
-  category: number;
+  @JoinColumn({ name: 'categoryId' })
+  categoryId: number;
 
-  @ManyToOne(() => OwnerEntity, (owner) => owner.id, { onDelete: 'CASCADE', nullable: false })
-  @JoinColumn({ name: 'owner_id' })
-  owner: number;
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE', nullable: false })
+  @JoinColumn({ name: 'ownerId' })
+  userId: number;
 
   @OneToMany(() => BasketEntity, (basket) => basket.store, { cascade: true, nullable: true })
   basket?: BasketEntity[];

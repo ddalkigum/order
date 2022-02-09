@@ -4,7 +4,7 @@ import { IApiResponse } from '../../common/api/interface';
 import { ILogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { checkRequired } from '../../util/checkRequired';
-import { IHttpRouter } from '../user/interface';
+import { IHttpRouter } from '../interface';
 import { ISearchStoreOption, IStoreService } from './service';
 
 // @ts-ignore
