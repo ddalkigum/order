@@ -45,7 +45,7 @@ export default class StoreEntity {
   @JoinColumn({ name: 'ownerId' })
   userId: number;
 
-  @OneToMany(() => BasketEntity, (basket) => basket.store, { cascade: true, nullable: true })
+  @OneToMany(() => BasketEntity, (basket) => basket.storeId, { cascade: true, nullable: true })
   basket?: BasketEntity[];
 
   @OneToMany(() => MenuEntity, (menu) => menu.store, { cascade: true, nullable: true })

@@ -16,7 +16,10 @@ export default class UserAddressEntity {
   @Index('sx_user_location', { spatial: true })
   location: number[];
 
+  @Column({ type: 'varchar', length: 1, comment: 'H: home, C: company' })
+  type: string;
+
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  userId: UserEntity;
+  userId: number;
 }

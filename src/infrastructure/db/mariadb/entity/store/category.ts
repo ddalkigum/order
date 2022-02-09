@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import StoreEntity from './store';
 
-@Entity({ name: 'storeCategory' })
+@Entity({ name: 'store_category' })
 export default class StoreCategoryEntity {
   @PrimaryGeneratedColumn({ type: 'int' })
   id: number;

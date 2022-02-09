@@ -34,6 +34,6 @@ export default class MenuEntity {
   @JoinColumn({ name: 'category_id' })
   category?: MenuCategoryEntity;
 
-  @OneToMany(() => BasketEntity, (basket) => basket.menu, { cascade: true })
+  @OneToMany(() => BasketEntity, (basket) => basket.menuId, { cascade: true })
   basket?: BasketEntity[];
 }

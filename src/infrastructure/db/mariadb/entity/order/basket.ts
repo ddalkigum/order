@@ -19,13 +19,13 @@ export default class BasketEntity {
 
   @ManyToOne(() => MenuEntity, (menu) => menu.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'menuId' })
-  menu: MenuEntity;
+  menuId: MenuEntity;
 
   @ManyToOne(() => StoreEntity, (store) => store.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'storeId' })
-  store: StoreEntity;
+  storeId: StoreEntity;
 
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  userId: UserEntity;
 }

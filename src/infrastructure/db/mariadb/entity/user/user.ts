@@ -1,5 +1,7 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import VerificationEntity from '../auth/verification';
 import BasketEntity from '../order/basket';
+import SearchEntity from '../search/search';
 import LikeStoreEntity from './likeStore';
 import UserAddressEntity from './userAddress';
 
@@ -35,12 +37,18 @@ export default class UserEntity {
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
   updatedAt: Date;
 
-  @OneToMany(() => BasketEntity, (basket) => basket.user, { onDelete: 'CASCADE', nullable: true })
+  @OneToMany(() => BasketEntity, (basket) => basket.userId, { onDelete: 'CASCADE', nullable: true })
   basket?: BasketEntity[];
 
   @OneToMany(() => UserAddressEntity, (address) => address.userId, { cascade: true })
   address?: UserAddressEntity[];
 
   @OneToMany(() => LikeStoreEntity, (likeStore) => likeStore.userId, { cascade: true })
-  likeStoreId?: LikeStoreEntity[];
+  likeStore?: LikeStoreEntity[];
+
+  @OneToMany(() => SearchEntity, (search) => search.userId)
+  search?: SearchEntity[];
+
+  @OneToMany(() => VerificationEntity, (verification) => verification.userId)
+  verification?: VerificationEntity[];
 }
