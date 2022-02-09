@@ -1,5 +1,5 @@
 import { container } from '../../../container';
-import { IDatabase } from '../../../infrastructure/db/mariadb/interface';
+import { IDatabase } from '../../../infrastructure/db/mariaDB/mariaDB';
 import { TYPES } from '../../../types';
 import { IInsertUserData, IUserRepository } from '../interface';
 import { testHelper } from './helper';

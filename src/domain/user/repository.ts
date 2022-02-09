@@ -1,8 +1,8 @@
 import { inject, injectable } from 'inversify';
 import UserEntity from '../../infrastructure/db/mariaDB/entity/user/user';
-import { IDatabase } from '../../infrastructure/db/mariadb/interface';
+import { IDatabase } from '../../infrastructure/db/mariaDB/mariaDB';
 import { TYPES } from '../../types';
-import { IInsertUserData, IUpdateUserData, IUserRepository } from './interface';
+import { IInsertUserData, IUserRepository } from './interface';
 
 export const USER_TABLE = 'user';
 
@@ -27,7 +27,7 @@ export default class UserRepository implements IUserRepository {
     return await this.db.deleteDataById(USER_TABLE, id);
   }
 
-  public async updateUserData(data: IUpdateUserData): Promise<UserEntity> {
+  public async updateUserData(data: Partial<UserEntity>): Promise<UserEntity> {
     return await this.db.updateData(USER_TABLE, data.id, data);
   }
 }

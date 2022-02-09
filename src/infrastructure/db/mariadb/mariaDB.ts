@@ -7,9 +7,31 @@ import { ILogger } from '../../logger/interface';
 import MenuEntity from './entity/menu/menu';
 import StoreEntity from './entity/store/store';
 import UserEntity from './entity/user/user';
-import { IDatabase, IEntity } from './interface';
 import { devConnectionOption } from './ormConfig';
 import { getStoreQueryBySearch } from './query';
+
+export type ColumnCondition<T> = {
+  [K in keyof T]?: T[K];
+};
+
+export interface IEntity {
+  id: number;
+}
+
+export interface IDatabase {
+  init: () => Promise<void>;
+  close: () => Promise<void>;
+  truncate: (table: string) => Promise<void>;
+  getDataById: <T extends IEntity>(table: string, id: number | string) => Promise<T>;
+  getDataByColumn: <T extends IEntity>(table: string, column: any) => Promise<T>;
+  getDataFromUserLocationSortByNearest: (table: string, location: string, options: ISearchStoreOption) => Promise<any>;
+  getDataUsingInnerJoin: <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>) => Promise<T>;
+  insert: <T extends IEntity>(table: string, row: T) => Promise<T>;
+  insertWithoutId: <T extends IEntity>(table: string, row: Omit<T, 'id'>) => Promise<T>;
+  insertLocation: (table: string, data: any) => Promise<any>;
+  deleteDataById: (table: string, id: number | string) => Promise<void>;
+  updateData: (table: string, id: number, data: any) => Promise<any>;
+}
 
 const getEntityByTableName = (table: string) => {
   switch (table) {
@@ -22,10 +44,6 @@ const getEntityByTableName = (table: string) => {
     default:
       return null;
   }
-};
-
-export type ColumnCondition<T> = {
-  [K in keyof T]?: T[K];
 };
 
 const convertGetDataColumnCondition = <T extends IEntity>(columnCondition: ColumnCondition<T>): ObjectLiteral => {

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import MenuEntity from '../../infrastructure/db/mariaDB/entity/menu/menu';
 import StoreEntity from '../../infrastructure/db/mariaDB/entity/store/store';
-import { IDatabase } from '../../infrastructure/db/mariadb/interface';
+import { IDatabase } from '../../infrastructure/db/mariaDB/mariaDB';
 import { TYPES } from '../../types';
 import { ISearchStoreOption, IUpdateStoreRequest } from './service';
 

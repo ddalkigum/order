@@ -18,8 +18,15 @@ export interface IUserData {
   ci: string;
 }
 
-export interface IUpdateUserData extends IInsertUserData {
-  id: number;
+export interface IUpdateUserData {
+  id?: number;
+  nickname?: string;
+  phone_number?: string;
+  encrypted_ci?: string;
+  created_at?: Date;
+  updated_at?: Date;
+  basket?: any;
+  address?: any;
 }
 
 export interface IUserRepository {

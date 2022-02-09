@@ -1,5 +1,5 @@
 import { ILocation } from '../common/type/lcation';
-import { IEntity } from '../infrastructure/db/mariadb/interface';
+import { IEntity } from '../infrastructure/db/mariaDB/mariaDB';
 
 export const convertLocationToPointType = (location: ILocation) => {
   return `POINT(${location.longitude}, ${location.latitude})`;

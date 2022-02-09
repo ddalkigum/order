@@ -12,6 +12,10 @@ ENV NLS_LANG=korean_korea.utf8
 # Create Directory for container
 WORKDIR /app
 
+# Install typescript global 
+RUN npm install -g typescript
+RUN npm install -g ts-node
+
 # Copy package.json
 COPY package.json .
 
@@ -20,7 +24,6 @@ RUN npm install
 
 ADD . /app
 
-CMD ["npm", "run", "build"]
 CMD ["npm", "run", "start:dev"]
 
 EXPOSE 3000

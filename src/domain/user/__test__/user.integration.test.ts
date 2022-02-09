@@ -2,7 +2,7 @@ import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { container } from '../../../container';
 import { TYPES } from '../../../types';
-import { IDatabase } from '../../../infrastructure/db/mariadb/interface';
+import { IDatabase } from '../../../infrastructure/db/mariaDB/mariaDB';
 import { testHelper } from './helper';
 import { ILogger } from '../../../infrastructure/logger/interface';
 
