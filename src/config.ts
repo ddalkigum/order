@@ -19,8 +19,11 @@ const envFound = dotenv.config({ path });
 export const config = {
   baseURL: process.env.BASE_URL || 'http://localhost:3000',
   jwtSignKey: process.env.SECRET_KEY || 'order',
+  kakaoJavascriptSecret: process.env.KAKAO_JS_SECRET,
 };
 
 if (!envFound || envFound.error) {
   throw new Error(`Couldn't find ${path} file`);
 }
+
+console.log(config);

@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import VerificationEntity from '../auth/verification';
 import BasketEntity from '../order/basket';
 import SearchEntity from '../search/search';
@@ -13,22 +13,24 @@ export default class UserEntity {
   @Column({ type: 'varchar', length: '120' })
   password: string;
 
-  @Column({ type: 'varchar', length: '11' })
-  name: string;
-
   @Column({ type: 'varchar', length: '50' })
   nickname: string;
 
-  @Column({ type: 'varchar', length: '50', nullable: true })
+  @Column({ type: 'varchar', length: '50', unique: true })
+  @Index('idx_email')
   email: string;
 
   @Column({ type: 'varchar', length: '11' })
+  @Index('idx_phone_number')
   phoneNumber: string;
 
-  @Column({ type: 'varchar', length: 60, nullable: false })
-  encryptedCI: string;
+  @Column({ type: 'char', length: 1, default: 'S', comment: 'K: kakao, F: facebook, G: google, S: standard' })
+  type: string;
 
-  @Column({ type: 'varchar', length: '300' })
+  @Column({ type: 'char', length: 1, default: 'U', comment: 'U: user, O: owner' })
+  status: string;
+
+  @Column({ type: 'varchar', length: '300', nullable: true })
   profileImageURL: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })

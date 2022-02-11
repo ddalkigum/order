@@ -1,10 +1,11 @@
 export const TYPES = {
   // Infrastructure
-  Logger: Symbol.for('Logger'),
+  WinstonLogger: Symbol.for('WinstonLogger'),
   Server: Symbol.for('Server'),
   MorganLogger: Symbol.for('MorganLogger'),
   MariaDB: Symbol.for('MariaDB'),
-  MongoDB: Symbol.for('MongoDB'),
+  RedisDB: Symbol.for('RedisDB'),
+  KakaoService: Symbol.for('KakaoService'),
 
   // Common
   ApiResponse: Symbol.for('ApiResponse'),

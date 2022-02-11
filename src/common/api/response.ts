@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { injectable } from 'inversify';
 import { IApiResponse } from './interface';
 
-// @ts-ignore
 @injectable()
 export default class ApiResponse implements IApiResponse {
   public async generateResponse(request: Request, response: Response, next: NextFunction, func: any): Promise<any> {

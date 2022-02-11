@@ -1,23 +1,41 @@
 import { inject, injectable } from 'inversify';
 import UserEntity from '../../infrastructure/db/mariaDB/entity/user/user';
 import { IDatabase } from '../../infrastructure/db/mariaDB/mariaDB';
+import { IWinstonLogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
-import { JWT } from '../interface';
+import { IUserInsertResult, IUserJoin } from './interface';
 
 export const USER_TABLE = 'user';
 
 export interface IUserRepository {
-  getUserById: (id: number) => Promise<any>; // My Page
-  getTokenByEncryptedCI: (encryptedCI: string) => Promise<JWT>; // Login
-  insertUser: (data: any) => Promise<UserEntity>; // Sign up
-  deleteUserById: (id: number) => Promise<void>; // Withdraw
-  updateUser: (data: any) => Promise<UserEntity>; // Modify user information
-  // @TODO 유저 검색 기록 가지고 오기 (주소)
-  // @TODO 최근 검색어 가지고 오기(음식, 음식점)
+  getUserByEmail: (email: string) => Promise<UserEntity>;
+  insert: (userData: IUserJoin) => Promise<IUserInsertResult>;
+  getUserById: (userId: number) => Promise<UserEntity>;
+  update: (userData: Partial<UserEntity>) => Promise<Partial<UserEntity>>;
 }
 
-// @ts-ignore
 @injectable()
-export class UserRepository {
+export class UserRepository implements IUserRepository {
   @inject(TYPES.MariaDB) private db: IDatabase;
+  @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
+
+  public getUserByEmail = async (email: string) => {
+    this.logger.debug(`UserRepository: getUserDataByEmail`);
+    return await this.db.getDataByColumn<UserEntity>(USER_TABLE, { email });
+  };
+
+  public insert = async (userData: IUserJoin) => {
+    this.logger.debug(`UserRepository: insert`);
+    return await this.db.insertWithoutId<IUserInsertResult>(USER_TABLE, userData);
+  };
+
+  public getUserById = async (userId: number) => {
+    this.logger.debug(`UserRepository: getUserById`);
+    return await this.db.getDataById<UserEntity>(USER_TABLE, userId);
+  };
+
+  public update = async (userData: Partial<UserEntity>) => {
+    this.logger.debug(`UserRepository: update`);
+    return await this.db.updateData(USER_TABLE, userData.id, userData);
+  };
 }

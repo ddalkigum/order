@@ -3,7 +3,7 @@ import { Connection, createConnection, InsertResult, ObjectLiteral } from 'typeo
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { ISearchStoreOption } from '../../../domain/store/service';
 import { TYPES } from '../../../types';
-import { ILogger } from '../../logger/interface';
+import { IWinstonLogger } from '../../logger/interface';
 import MenuEntity from './entity/menu/menu';
 import StoreEntity from './entity/store/store';
 import UserEntity from './entity/user/user';
@@ -27,7 +27,7 @@ export interface IDatabase {
   getDataFromUserLocationSortByNearest: (table: string, location: string, options: ISearchStoreOption) => Promise<any>;
   getDataUsingInnerJoin: <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>) => Promise<T>;
   insert: <T extends IEntity>(table: string, row: T) => Promise<T>;
-  insertWithoutId: <T extends IEntity>(table: string, row: Omit<T, 'id'>) => Promise<T>;
+  insertWithoutId: <T extends IEntity>(table: string, row: Partial<T>) => Promise<T>;
   insertLocation: (table: string, data: any) => Promise<any>;
   deleteDataById: (table: string, id: number | string) => Promise<void>;
   updateData: (table: string, id: number, data: any) => Promise<any>;
@@ -54,10 +54,9 @@ const convertGetDataColumnCondition = <T extends IEntity>(columnCondition: Colum
   }, {});
 };
 
-// @ts-ignore
 @injectable()
 export class MariaDB implements IDatabase {
-  @inject(TYPES.Logger) private logger: ILogger;
+  @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
   private connection?: Connection;
 
   public async init(): Promise<void> {
@@ -152,7 +151,7 @@ export class MariaDB implements IDatabase {
     }
   };
 
-  public async insertWithoutId<T extends IEntity>(table: string, row: Omit<T, 'id'>): Promise<T> {
+  public async insertWithoutId<T extends IEntity>(table: string, row: Partial<T>): Promise<T> {
     const queryRunner = this.connection.createQueryRunner();
     try {
       const EntityClass = getEntityByTableName(table);

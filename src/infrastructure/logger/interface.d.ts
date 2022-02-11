@@ -1,4 +1,4 @@
-export interface ILogger {
+export interface IWinstonLogger {
   init: () => boolean;
   debug: (msg: any, ...optionalParams: any[]) => void;
   http: (msg: any, ...optionalParams: any[]) => void;

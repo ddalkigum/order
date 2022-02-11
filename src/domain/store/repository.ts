@@ -17,7 +17,7 @@ export interface IStoreRepository {
   update: (id: number, data: IUpdateStoreRequest) => Promise<any>;
 }
 
-// @ts-ignore
+//
 @injectable()
 export class StoreRepository implements IStoreRepository {
   @inject(TYPES.MariaDB) private db: IDatabase;

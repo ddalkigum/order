@@ -2,16 +2,16 @@ import { Handler } from 'express';
 import { inject, injectable } from 'inversify';
 import morgan, { StreamOptions } from 'morgan';
 import { TYPES } from '../../types';
-import { ILogger } from './interface';
+import { IWinstonLogger } from './interface';
 
 export interface IMorganLogger {
   init: () => Handler;
 }
 
-// @ts-ignore
+//
 @injectable()
 export class MorganLogger implements IMorganLogger {
-  @inject(TYPES.Logger) private logger: ILogger;
+  @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
 
   stream: StreamOptions = {
     write: (message) => this.logger.http(message),

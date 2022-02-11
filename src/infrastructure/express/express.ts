@@ -1,13 +1,13 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import session from 'express-session';
 import { inject, injectable } from 'inversify';
 import { generalErrorHandler } from '../../common/error/handler';
 import { IHttpRouter } from '../../domain/interface';
 import { TYPES } from '../../types';
 import { IServer } from './interface';
 
-// @ts-ignore
 @injectable()
 export default class ExpressServer implements IServer {
   @inject(TYPES.UserRouter) private userRouter: IHttpRouter;
@@ -21,6 +21,16 @@ export default class ExpressServer implements IServer {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
+
+    this.app.set('view engine', 'ejs');
+    this.app.set('views', '/Users/user/Documents/projects/node/order/view/');
+    this.app.use(
+      session({
+        secret: 'order',
+        resave: false,
+        saveUninitialized: true,
+      }),
+    );
 
     // route init
     this.userRouter.init();

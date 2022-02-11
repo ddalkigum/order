@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify';
 import MenuEntity from '../../infrastructure/db/mariaDB/entity/menu/menu';
 import StoreEntity from '../../infrastructure/db/mariaDB/entity/store/store';
-import { ILogger } from '../../infrastructure/logger/interface';
+import { IWinstonLogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { convertEntityToCamelFormat, convertLocationToPointType } from '../../util/convert';
 import { getPaginationByPage, parsingLocation } from '../../util/request';
@@ -42,10 +42,10 @@ export interface IStoreService {
   updateStoreData: (id: number, data: IUpdateStoreRequest) => Promise<StoreEntity>;
 }
 
-// @ts-ignore
+//
 @injectable()
 export class StoreService implements IStoreService {
-  @inject(TYPES.Logger) private logger: ILogger;
+  @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
   @inject(TYPES.StoreRepository) private storeRepository: IStoreRepository;
 
   public getStoreMenuList = async (id: number) => {

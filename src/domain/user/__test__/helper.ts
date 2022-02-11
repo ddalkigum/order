@@ -1,33 +1,13 @@
-import { encryptWithSHA256 } from '../../../util/crypto';
-
 export const testHelper = {
-  tableName: 'user_test',
-
-  repository: {
-    userData: {
-      phone_number: '01011112222',
-      nickname: 'testNickname',
-      encrypted_ci: encryptWithSHA256('testCI'),
-    },
-
-    userDataForUpdate: {
-      phone_number: '01011113333',
-      nickname: 'testNickname',
-      encrypted_ci: encryptWithSHA256('testCI'),
-    },
+  userData: {
+    password: '1234',
+    nickname: 'test_nickname',
+    email: 'test@email.com',
+    phoneNumber: '01012345678',
   },
-
-  router: {
-    userData: {
-      phoneNumber: '01011112222',
-      nickname: 'testNickname',
-      ci: 'testCI',
-    },
-
-    userDataForUpdate: {
-      phoneNumber: '01011113333',
-      nickname: 'testNickname',
-      ci: 'testCI',
-    },
+  update: {
+    nickname: 'update_nickname',
+    email: 'update@email.com',
   },
+  accessToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjQ0NDgzOTU0fQ.L1jHREEqYYK9_FFcrr2r9zKuZ3NIrnSIFfIK4FYnFZk',
 };

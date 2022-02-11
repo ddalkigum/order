@@ -1,22 +1,36 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { inject, injectable } from 'inversify';
 import { IApiResponse } from '../../common/api/interface';
-import { ILogger } from '../../infrastructure/logger/interface';
+import { IWinstonLogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { checkRequired } from '../../util/checkRequired';
 import { IHttpRouter } from '../interface';
 import { ISearchStoreOption, IStoreService } from './service';
 
-// @ts-ignore
 @injectable()
 export class StoreRouter implements IHttpRouter {
-  @inject(TYPES.Logger) private logger: ILogger;
+  @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
   @inject(TYPES.ApiResponse) private apiResponse: IApiResponse;
   @inject(TYPES.StoreService) private storeService: IStoreService;
 
   private router = Router();
 
   public init = () => {
+    this.router.get('/health', (request: Request, response: Response, next: NextFunction) => {
+      this.apiResponse.generateResponse(request, response, next, async () => {
+        return 'Success';
+      });
+    });
+
+    // Create store category
+    this.router.get('/health', (request: Request, response: Response, next: NextFunction) => {
+      this.apiResponse.generateResponse(request, response, next, async () => {
+        return 'Success';
+      });
+    });
+
+    // Get store category list
+
     this.router.get('/location/:userLocation', (request: Request, response: Response, next: NextFunction) => {
       this.apiResponse.generateResponse(request, response, next, async () => {
         const { userLocation } = request.params;

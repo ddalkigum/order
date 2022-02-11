@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import winston, { Logger } from 'winston';
 import WinstonDaily from 'winston-daily-rotate-file';
 import { isObject } from '../../util/typeCheck';
-import { ILogger } from './interface';
+import { IWinstonLogger } from './interface';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const concatParams = (params: any[]): string => {
@@ -13,7 +13,7 @@ const concatParams = (params: any[]): string => {
 };
 
 @injectable()
-export default class WinstonLogger implements ILogger {
+export class WinstonLogger implements IWinstonLogger {
   private logger: Logger;
 
   constructor() {

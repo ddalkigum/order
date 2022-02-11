@@ -6,8 +6,8 @@ import UserRouter from './domain/user/router';
 import { MariaDB, IDatabase } from './infrastructure/db/mariaDB/mariaDB';
 import ExpressServer from './infrastructure/express/express';
 import { IServer } from './infrastructure/express/interface';
-import { ILogger } from './infrastructure/logger/interface';
-import WinstonLogger from './infrastructure/logger/winston';
+import { IWinstonLogger } from './infrastructure/logger/interface';
+import { WinstonLogger } from './infrastructure/logger/winston';
 import { TYPES } from './types';
 import { IMorganLogger, MorganLogger } from './infrastructure/logger/morgan';
 import { StoreRouter } from './domain/store/router';
@@ -16,13 +16,17 @@ import { IStoreRepository, StoreRepository } from './domain/store/repository';
 import { IHttpRouter } from './domain/interface';
 import { UserService } from './domain/user/service';
 import { UserRepository } from './domain/user/repository';
+import { IKakaoSercvice, KakaoService } from './infrastructure/social/kakao';
+import { IRedisDB, RedisDB } from './infrastructure/db/redis/redis';
 
 const container = new Container({ defaultScope: 'Singleton' });
 // Infrastructure
-container.bind<ILogger>(TYPES.Logger).to(WinstonLogger);
+container.bind<IWinstonLogger>(TYPES.WinstonLogger).to(WinstonLogger);
 container.bind<IDatabase>(TYPES.MariaDB).to(MariaDB);
 container.bind<IServer>(TYPES.Server).to(ExpressServer);
 container.bind<IMorganLogger>(TYPES.MorganLogger).to(MorganLogger);
+container.bind<IKakaoSercvice>(TYPES.KakaoService).to(KakaoService);
+container.bind<IRedisDB>(TYPES.RedisDB).to(RedisDB);
 
 // Common container
 container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse);
