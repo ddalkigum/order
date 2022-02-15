@@ -19,4 +19,8 @@ export const TYPES = {
   StoreRouter: Symbol.for('StoreRouter'),
   StoreService: Symbol.for('StoreService'),
   StoreRepository: Symbol.for('StoreRepository'),
+
+  // Dev seed
+  DevRouter: Symbol.for('DevRouter'),
+  Seed: Symbol.for('Seed'),
 };

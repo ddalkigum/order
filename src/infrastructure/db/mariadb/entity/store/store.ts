@@ -16,13 +16,13 @@ export default class StoreEntity {
   description: string;
 
   @Column({ type: 'varchar', length: 11 })
-  store_phone_number: string;
+  storePhoneNumber: string;
 
   @Column({ type: 'tinyint', default: 0 })
-  package_available: number;
+  packageAvailable: number;
 
   @Column({ type: 'int', width: 6 })
-  min_order_price: number;
+  minOrderPrice: number;
 
   @Column({ type: 'varchar', length: 50 })
   address: string;
@@ -32,10 +32,10 @@ export default class StoreEntity {
   location: ArrayBuffer;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)' })
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)', onUpdate: 'CURRENT_TIMESTAMP(6)' })
-  updated_at: Date;
+  updatedAt: Date;
 
   @ManyToOne(() => StoreCategoryEntity, (category) => category.id, { onDelete: 'CASCADE', nullable: false })
   @JoinColumn({ name: 'categoryId' })

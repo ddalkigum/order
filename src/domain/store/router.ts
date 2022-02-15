@@ -5,7 +5,7 @@ import { IWinstonLogger } from '../../infrastructure/logger/interface';
 import { TYPES } from '../../types';
 import { checkRequired } from '../../util/checkRequired';
 import { IHttpRouter } from '../interface';
-import { ISearchStoreOption, IStoreService } from './service';
+import { IStoreService } from './service';
 
 @injectable()
 export class StoreRouter implements IHttpRouter {
@@ -22,35 +22,20 @@ export class StoreRouter implements IHttpRouter {
       });
     });
 
-    // Create store category
-    this.router.get('/health', (request: Request, response: Response, next: NextFunction) => {
-      this.apiResponse.generateResponse(request, response, next, async () => {
-        return 'Success';
-      });
-    });
-
     // Get store category list
-
-    this.router.get('/location/:userLocation', (request: Request, response: Response, next: NextFunction) => {
+    this.router.get('/category/all', (request: Request, response: Response, next: NextFunction) => {
       this.apiResponse.generateResponse(request, response, next, async () => {
-        const { userLocation } = request.params;
-        const { search, page }: ISearchStoreOption = request.query;
-        this.logger.debug(`user location: ${userLocation}`);
-        this.logger.debug(`search: ${search}, page: ${page}`);
-        // location: @longitude,latitude
-
-        checkRequired([userLocation]);
-        return this.storeService.getRetrievedDataFromUserLocation(userLocation, {
-          search,
-          page,
-        });
+        return await this.storeService.getStoreCategoryList();
       });
     });
 
-    // Register store
-    this.router.post('/', (request: Request, response: Response, next: NextFunction) => {
+    // Get store list filtered category
+    this.router.get('/simple/:userLocation', (request: Request, response: Response, next: NextFunction) => {
       this.apiResponse.generateResponse(request, response, next, async () => {
-        return await this.storeService.insertStoreData();
+        const categoryName = request.query.category as string;
+        const { userLocation } = request.params; // location: @longitude,latitude
+        checkRequired([categoryName, userLocation]);
+        return await this.storeService.getStoreSimpleList(categoryName, userLocation);
       });
     });
 
@@ -58,7 +43,7 @@ export class StoreRouter implements IHttpRouter {
     this.router.get('/:id', (request: Request, response: Response, next: NextFunction) => {
       this.apiResponse.generateResponse(request, response, next, async () => {
         const storeId = parseInt(request.params.id);
-        const storeData = await this.storeService.getStoreMenuList(storeId);
+        const storeData = await this.storeService.getStoreDetailData(storeId);
         return { storeData };
       });
     });

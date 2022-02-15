@@ -32,10 +32,6 @@ export class WinstonLogger implements IWinstonLogger {
       return `${level}: ${message}`;
     });
 
-    /*
-     * Log levels
-     * error: 0, warn: 1, info: 2, http: 3, verbose: 4, debug: 5, silly: 6
-     */
     this.logger = winston.createLogger({
       format: combine(
         timestamp({
@@ -53,6 +49,7 @@ export class WinstonLogger implements IWinstonLogger {
           maxFiles: 30, // 30-day logs
           zippedArchive: true,
         }),
+
         // error level log
         new WinstonDaily({
           level: 'error',

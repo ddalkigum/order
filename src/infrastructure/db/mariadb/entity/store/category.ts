@@ -12,6 +12,6 @@ export default class StoreCategoryEntity {
   @Column({ type: 'varchar', length: '200' })
   icon: string;
 
-  @OneToMany(() => StoreEntity, (store) => store.id, { nullable: true })
+  @OneToMany(() => StoreEntity, (store) => store.categoryId, { nullable: true })
   store?: StoreEntity[];
 }

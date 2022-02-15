@@ -1,17 +1,19 @@
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
-import session from 'express-session';
 import { inject, injectable } from 'inversify';
 import { generalErrorHandler } from '../../common/error/handler';
 import { IHttpRouter } from '../../domain/interface';
 import { TYPES } from '../../types';
 import { IServer } from './interface';
+import { IMorganLogger } from '../logger/morgan';
 
 @injectable()
 export default class ExpressServer implements IServer {
+  @inject(TYPES.MorganLogger) private morganLogger: IMorganLogger;
   @inject(TYPES.UserRouter) private userRouter: IHttpRouter;
   @inject(TYPES.StoreRouter) private storeRouter: IHttpRouter;
+  @inject(TYPES.DevRouter) private devRouter: IHttpRouter;
 
   private app = express();
 
@@ -21,23 +23,16 @@ export default class ExpressServer implements IServer {
     this.app.use(cors());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: false }));
-
-    this.app.set('view engine', 'ejs');
-    this.app.set('views', '/Users/user/Documents/projects/node/order/view/');
-    this.app.use(
-      session({
-        secret: 'order',
-        resave: false,
-        saveUninitialized: true,
-      }),
-    );
+    this.app.use(this.morganLogger.init());
 
     // route init
     this.userRouter.init();
     this.storeRouter.init();
+    this.devRouter.init();
 
     this.app.use('/api/v1/user', this.userRouter.get());
     this.app.use('/api/v1/store', this.storeRouter.get());
+    this.app.use('/api/v1/dev', this.devRouter.get());
 
     // not found error handle
 

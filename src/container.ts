@@ -14,10 +14,12 @@ import { StoreRouter } from './domain/store/router';
 import { IStoreService, StoreService } from './domain/store/service';
 import { IStoreRepository, StoreRepository } from './domain/store/repository';
 import { IHttpRouter } from './domain/interface';
-import { UserService } from './domain/user/service';
-import { UserRepository } from './domain/user/repository';
+import { IUserService, UserService } from './domain/user/service';
+import { IUserRepository, UserRepository } from './domain/user/repository';
 import { IKakaoSercvice, KakaoService } from './infrastructure/social/kakao';
 import { IRedisDB, RedisDB } from './infrastructure/db/redis/redis';
+import { ISeed, Seed } from './seed/seed';
+import { DevRouter } from './domain/dev/devRouter';
 
 const container = new Container({ defaultScope: 'Singleton' });
 // Infrastructure
@@ -33,12 +35,16 @@ container.bind<IApiResponse>(TYPES.ApiResponse).to(ApiResponse);
 
 // User container
 container.bind<IHttpRouter>(TYPES.UserRouter).to(UserRouter);
-container.bind(TYPES.UserService).to(UserService);
-container.bind(TYPES.UserRepository).to(UserRepository);
+container.bind<IUserService>(TYPES.UserService).to(UserService);
+container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository);
 
 // Store container
 container.bind<IHttpRouter>(TYPES.StoreRouter).to(StoreRouter);
 container.bind<IStoreService>(TYPES.StoreService).to(StoreService);
 container.bind<IStoreRepository>(TYPES.StoreRepository).to(StoreRepository);
+
+// Dev seed container
+container.bind<IHttpRouter>(TYPES.DevRouter).to(DevRouter);
+container.bind<ISeed>(TYPES.Seed).to(Seed);
 
 export { container };

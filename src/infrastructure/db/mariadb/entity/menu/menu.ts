@@ -1,7 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import BasketEntity from '../order/basket';
 import StoreEntity from '../store/store';
-import MenuCategoryEntity from './category';
 
 @Entity({ name: 'menu' })
 export default class MenuEntity {
@@ -29,10 +28,7 @@ export default class MenuEntity {
   @ManyToOne(() => StoreEntity, (store) => store.id, { onDelete: 'CASCADE', nullable: true })
   @JoinColumn({ name: 'store_id' })
   store: StoreEntity;
-
-  @ManyToOne(() => MenuCategoryEntity, (category) => category.id, { onDelete: 'CASCADE', nullable: true })
-  @JoinColumn({ name: 'category_id' })
-  category?: MenuCategoryEntity;
+  p;
 
   @OneToMany(() => BasketEntity, (basket) => basket.menuId, { cascade: true })
   basket?: BasketEntity[];

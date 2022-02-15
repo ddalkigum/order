@@ -5,6 +5,7 @@ import { ISearchStoreOption } from '../../../domain/store/service';
 import { TYPES } from '../../../types';
 import { IWinstonLogger } from '../../logger/interface';
 import MenuEntity from './entity/menu/menu';
+import StoreCategoryEntity from './entity/store/category';
 import StoreEntity from './entity/store/store';
 import UserEntity from './entity/user/user';
 import { devConnectionOption } from './ormConfig';
@@ -15,19 +16,22 @@ export type ColumnCondition<T> = {
 };
 
 export interface IEntity {
-  id: number;
+  id?: number;
 }
 
 export interface IDatabase {
   init: () => Promise<void>;
   close: () => Promise<void>;
   truncate: (table: string) => Promise<void>;
+  useQuery: (query: string) => Promise<any[]>;
+  getAllData: <T>(table: string) => Promise<T[]>;
   getDataById: <T extends IEntity>(table: string, id: number | string) => Promise<T>;
   getDataByColumn: <T extends IEntity>(table: string, column: any) => Promise<T>;
   getDataFromUserLocationSortByNearest: (table: string, location: string, options: ISearchStoreOption) => Promise<any>;
-  getDataUsingInnerJoin: <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>) => Promise<T>;
+  getDataUsingInnerJoin: <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>, selectColumn?: any[]) => Promise<any>;
   insert: <T extends IEntity>(table: string, row: T) => Promise<T>;
   insertWithoutId: <T extends IEntity>(table: string, row: Partial<T>) => Promise<T>;
+  bulkInsert: <T extends IEntity>(table: string, rowList: T[]) => Promise<void>;
   insertLocation: (table: string, data: any) => Promise<any>;
   deleteDataById: (table: string, id: number | string) => Promise<void>;
   updateData: (table: string, id: number, data: any) => Promise<any>;
@@ -41,6 +45,8 @@ const getEntityByTableName = (table: string) => {
       return StoreEntity;
     case 'menu':
       return MenuEntity;
+    case 'store_category':
+      return StoreCategoryEntity;
     default:
       return null;
   }
@@ -74,6 +80,16 @@ export class MariaDB implements IDatabase {
     }
   }
 
+  public useQuery = async (query: string) => {
+    return await this.connection.query(query);
+  };
+
+  public getAllData = async <T>(table: string) => {
+    const EntityClass = getEntityByTableName(table);
+    const result = await this.connection.createQueryBuilder<T>(EntityClass, table).getMany();
+    return result;
+  };
+
   public async getDataById<T extends IEntity>(table: string, id: number | string): Promise<T> {
     const EntityClass = getEntityByTableName(table);
     const result = await this.connection.createQueryBuilder<T>(EntityClass, table).where({ id }).getOne();
@@ -97,12 +113,18 @@ export class MariaDB implements IDatabase {
     }
   };
 
-  public getDataUsingInnerJoin = async <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>) => {
+  public getDataUsingInnerJoin = async <T extends IEntity>(table1: string, table2: string, columnCondition: ColumnCondition<T>, selectColumn?: string[]) => {
     const queryRunner = this.connection.createQueryRunner();
     const EntityClass1 = getEntityByTableName(table1);
     const objectLiteral = convertGetDataColumnCondition(columnCondition);
 
-    const result = await this.connection.createQueryBuilder<T>(EntityClass1, table1).setQueryRunner(queryRunner).leftJoinAndSelect(`${table1}.${table2}`, table2).where(objectLiteral).getOne();
+    const result = await this.connection
+      .createQueryBuilder<T>(EntityClass1, table1)
+      .setQueryRunner(queryRunner)
+      .select(selectColumn)
+      .leftJoin(`${table1}.${table2}`, table2)
+      .where(objectLiteral)
+      .getMany();
     return result;
   };
 
@@ -143,6 +165,21 @@ export class MariaDB implements IDatabase {
         .execute();
       await queryRunner.commitTransaction();
       return data;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  };
+
+  public bulkInsert = async <T extends IEntity>(table: string, rowList: T[]) => {
+    const queryRunner = this.connection.createQueryRunner();
+    try {
+      await queryRunner.startTransaction();
+      const EntityClass = getEntityByTableName(table);
+      await this.connection.createQueryBuilder(EntityClass, table).setQueryRunner(queryRunner).insert().values(rowList).execute();
+      await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw error;

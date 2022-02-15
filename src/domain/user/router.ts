@@ -21,13 +21,14 @@ export default class UserRouter implements IHttpRouter {
       });
     });
 
-    this.router.get('/check/email/:email', authorization, async (request: Request, response: Response, next: NextFunction) => {
+    this.router.get('/check/email/:email', async (request: Request, response: Response, next: NextFunction) => {
       await this.apiResponse.generateResponse(request, response, next, async () => {
         const { email } = request.params;
         checkRequired([email]);
 
-        const userFound = this.userService.existsUserByEmail(email);
+        const userFound = await this.userService.existsUserByEmail(email);
         if (userFound) return 'UserAlreadyExist';
+        return 'UnknownUser';
       });
     });
 

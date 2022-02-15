@@ -8,7 +8,6 @@ export interface IMorganLogger {
   init: () => Handler;
 }
 
-//
 @injectable()
 export class MorganLogger implements IMorganLogger {
   @inject(TYPES.WinstonLogger) private logger: IWinstonLogger;
@@ -18,6 +17,6 @@ export class MorganLogger implements IMorganLogger {
   };
 
   public init = () => {
-    return morgan('combined', { stream: this.stream });
+    return morgan(':method :url :status :res[content-length] - :response-time ms', { stream: this.stream });
   };
 }

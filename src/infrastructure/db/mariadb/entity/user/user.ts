@@ -25,10 +25,10 @@ export default class UserEntity {
   phoneNumber: string;
 
   @Column({ type: 'char', length: 1, default: 'S', comment: 'K: kakao, F: facebook, G: google, S: standard' })
-  type: string;
+  loginType?: string;
 
-  @Column({ type: 'char', length: 1, default: 'U', comment: 'U: user, O: owner' })
-  status: string;
+  @Column({ type: 'char', length: 1, default: 'N' })
+  isOwner?: string;
 
   @Column({ type: 'varchar', length: '300', nullable: true })
   profileImageURL: string;

@@ -15,7 +15,7 @@
   "collectCoverage": true,
   "coverageThreshold": {
     "global": {
-      "statements": 70
+      "statements": 60
     }
   }
 }
